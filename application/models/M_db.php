@@ -35,7 +35,7 @@ class M_db extends CI_Model
   public function insert($table, $data)
   {
     $this->db->insert($table, $data);
-    return $this->db->insert_id();
+    return $this->db->error();
   }
 
   /**
@@ -50,7 +50,8 @@ class M_db extends CI_Model
   public function update($tableName, $data, $id)
   {
     $this->db->where('id', $id);
-    return $this->db->update($tableName, $data);
+    $this->db->update($tableName, $data);
+    return $this->db->error();
   }
 
   /**
@@ -63,6 +64,7 @@ class M_db extends CI_Model
   public function delete($table, $id)
   {
     $this->db->where('id', $id);
-    return $this->db->delete($table);
+    $this->db->delete($table);
+    return $this->db->error();
   }
 }
