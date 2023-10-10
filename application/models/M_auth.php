@@ -6,22 +6,23 @@ class M_auth extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model(['m_db']);
 	}
-	public function set_session($uuid, $id)
+	public function setSession($session, $id)
 	{
-		$data = array(
-			'SESSION_ID' => $uuid
-		);
-		$this->oracle->where('ID', $id);
-		$this->oracle->update('USERS', $data);
+		$data = [
+			'session' => $session
+		];
+		$this->m_db->update('users', $data, $id);
+		$this->session->set_userdata($data);
 	}
 
-	public function unsetSession()
+	public function unsetSession($id)
 	{
-		if (isset($_COOKIE['session_id'])) {
-			unset($_COOKIE['session_id']);
-			setcookie('session_id', '', time() - 3600, '/');
-		}
-		shell_exec('rmdir /s "' . APPPATH . 'cache\session" /q');
+		$data = [
+			'session' => ''
+		];
+		$this->m_db->update('users', $data, $id);
+		$this->session->unset_userdata('session');
 	}
 }

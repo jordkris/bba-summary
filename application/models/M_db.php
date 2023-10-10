@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class M_auth extends CI_Model
+class M_db extends CI_Model
 {
   public function __construct()
   {
@@ -14,9 +14,9 @@ class M_auth extends CI_Model
    * @param string $tableName The name of the table to retrieve records from.
    * @return array An array of records from the table.
    */
-  public function selectAll($tableName)
+  public function selectAll($table)
   {
-    return $this->db->get($tableName)->result_array();
+    return $this->db->get($table)->result_array();
   }
   /**
    * Retrieves a single row from the specified table by its id.
@@ -26,16 +26,43 @@ class M_auth extends CI_Model
    * @throws Exception If there is an error retrieving the row.
    * @return array The retrieved row as an associative array.
    */
-  public function selectById($tableName, $id)
+  public function selectById($table, $id)
   {
     $this->db->where('id', $id);
-    return $this->db->get($tableName)->row_array();
+    return $this->db->get($table)->row_array();
   }
 
+  public function insert($table, $data)
+  {
+    $this->db->insert($table, $data);
+    return $this->db->insert_id();
+  }
+
+  /**
+   * Updates a record in the specified table.
+   *
+   * @param string $tableName The name of the table.
+   * @param array $data An associative array of column names and their new values.
+   * @param int $id The ID of the record to update.
+   * @throws Exception A description of the exception that can be thrown.
+   * @return bool True on success, false on failure.
+   */
   public function update($tableName, $data, $id)
   {
-    for ($data as $key => $value) {
-      
-    }
+    $this->db->where('id', $id);
+    return $this->db->update($tableName, $data);
+  }
+
+  /**
+   * Deletes a record from the specified table based on the provided ID.
+   *
+   * @param string $table The name of the table from which to delete the record.
+   * @param int $id The ID of the record to be deleted.
+   * @return bool True if the record was successfully deleted, false otherwise.
+   */
+  public function delete($table, $id)
+  {
+    $this->db->where('id', $id);
+    return $this->db->delete($table);
   }
 }
