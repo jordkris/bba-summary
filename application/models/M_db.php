@@ -11,7 +11,7 @@ class M_db extends CI_Model
   public function selectAll($table)
   {
     $response = new DbResponse();
-    $response->output = $this->db->get($table)->result_array();
+    $response->output = $this->db->get($table);
     $response->error = $this->db->error();
     return $response;
   }
@@ -20,7 +20,16 @@ class M_db extends CI_Model
   {
     $response = new DbResponse();
     $this->db->where('id', $id);
-    $response->output = $this->db->get($table)->row_array();
+    $response->output = $this->db->get($table);
+    $response->error = $this->db->error();
+    return $response;
+  }
+
+  public function selectByCustom($table, $key, $value)
+  {
+    $response = new DbResponse();
+    $this->db->where($key, $value);
+    $response->output = $this->db->get($table);
     $response->error = $this->db->error();
     return $response;
   }
