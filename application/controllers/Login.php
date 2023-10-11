@@ -9,8 +9,15 @@ class Login extends CI_Controller
 		$this->load->model(array('m_auth', 'm_db'));
 	}
 
+	private function isLoggedIn() {
+		# get userdata
+		$userdata = $this->session->userdata('roleId');
+		echo $userdata;
+	}
+
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$data['title'] = 'Login';
+		$this->load->view('auth/login', $data);
 	}
 }

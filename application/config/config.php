@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] =  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+$config['base_url'] =  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/bba-summary';
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ $config['base_url'] =  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '/';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

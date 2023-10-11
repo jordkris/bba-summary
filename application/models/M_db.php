@@ -51,6 +51,15 @@ class M_db extends CI_Model
     return $response;
   }
 
+  public function updateByCustom($tableName, $data, $key, $value)
+  {
+    $response = new DbResponse();
+    $this->db->where($key, $value);
+    $response->output = $this->db->update($tableName, $data);
+    $response->error = $this->db->error();
+    return $response;
+  }
+
   public function delete($table, $id)
   {
     $response = new DbResponse();

@@ -4,12 +4,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Api extends CI_Controller
 {
   public $table;
+  public $session;
   public function __construct()
   {
     parent::__construct();
-    $this->load->model(['m_db']);
+    $this->load->model(['m_auth', 'm_db']);
     $header = $this->input->request_headers();
     $this->table = isset($header['table']) ? $header['table'] : null;
+    $this->session = isset($header['session']) ? $header['session'] : null;
+  }
+
+  private function checkSession()
+  {
+    $status = false;
+    if ($this->session) {
+      $dbResponse = $this->m_db->selectByCustom('users', 'session', $this->session);
+      if (!$dbResponse->error['code'] && $dbResponse->output->num_rows() > 0) {
+        $status = true;
+      }
+    }
+    return $status;
   }
   public function getAll()
   {
@@ -18,7 +32,14 @@ class Api extends CI_Controller
 
     try {
       if ($this->input->method() == 'get') {
-        if (!$this->table) throw new Exception('Table is required');
+        if (!$this->table) {
+          $response->status = 404;
+          throw new Exception('Table is required');
+        }
+        if (!$this->checkSession()) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
         $dbResponse = $this->m_db->selectAll($this->table);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
@@ -26,13 +47,14 @@ class Api extends CI_Controller
           $response->message = 'Success';
         } else {
           $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
       $response->message = $e->getMessage();
     }
     echo $response->toJson();
@@ -45,7 +67,14 @@ class Api extends CI_Controller
 
     try {
       if ($this->input->method() == 'get') {
-        if (!$this->table) throw new Exception('Table is required');
+        if (!$this->table) {
+          $response->status = 404;
+          throw new Exception('Table is required');
+        }
+        if (!$this->checkSession()) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
         $dbResponse = $this->m_db->selectById($this->table, $id);
         if (!$dbResponse->error['code']) {
           if ($dbResponse->output->num_rows() > 0) {
@@ -58,13 +87,14 @@ class Api extends CI_Controller
           }
         } else {
           $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
       $response->message = $e->getMessage();
     }
     echo $response->toJson();
@@ -76,7 +106,14 @@ class Api extends CI_Controller
 
     try {
       if ($this->input->method() == 'post') {
-        if (!$this->table) throw new Exception('Table is required');
+        if (!$this->table) {
+          $response->status = 404;
+          throw new Exception('Table is required');
+        }
+        if (!$this->checkSession()) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
         $data = json_decode($this->input->raw_input_stream, true);
         $dbResponse = $this->m_db->insert($this->table, $data);
         if (!$dbResponse->error['code']) {
@@ -85,13 +122,14 @@ class Api extends CI_Controller
           $response->message = 'Success';
         } else {
           $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
       $response->message = $e->getMessage();
     }
     echo $response->toJson();
@@ -104,7 +142,14 @@ class Api extends CI_Controller
 
     try {
       if ($this->input->method() == 'post') {
-        if (!$this->table) throw new Exception('Table is required');
+        if (!$this->table) {
+          $response->status = 404;
+          throw new Exception('Table is required');
+        }
+        if (!$this->checkSession()) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
         $data = json_decode($this->input->raw_input_stream, true);
         $dbResponse = $this->m_db->update($this->table, $data, $id);
         if (!$dbResponse->error['code']) {
@@ -113,13 +158,15 @@ class Api extends CI_Controller
           $response->message = 'Success';
         } else {
           $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
+
       $response->message = $e->getMessage();
     }
     echo $response->toJson();
@@ -133,7 +180,14 @@ class Api extends CI_Controller
 
     try {
       if ($this->input->method() == 'delete') {
-        if (!$this->table) throw new Exception('Table is required');
+        if (!$this->table) {
+          $response->status = 404;
+          throw new Exception('Table is required');
+        }
+        if (!$this->checkSession()) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
         $dbResponse = $this->m_db->delete($this->table, $id);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output;
@@ -141,13 +195,14 @@ class Api extends CI_Controller
           $response->message = 'Success';
         } else {
           $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
       $response->message = $e->getMessage();
     }
     echo $response->toJson();
@@ -164,33 +219,89 @@ class Api extends CI_Controller
         $this->table = 'users';
         $dbResponseOfUser = $this->m_db->selectByCustom($this->table, 'username', $data['username']);
         if (!$dbResponseOfUser->error['code']) {
-          if (count($dbResponseOfUser->output) > 0) {
+          if ($dbResponseOfUser->output->num_rows() > 0) {
             if (md5($data['password']) == $dbResponseOfUser->output->row_array()['password']) {
               $session = md5(time());
-              $dbResponseOfSession = $this->m_db->update($this->table, ['session' => $session], $dbResponseOfUser->output['id']);
+              $dbResponseOfSession = $this->m_db->update($this->table, ['session' => $session], $dbResponseOfUser->output->row_array()['id']);
               if (!$dbResponseOfSession->error['code']) {
                 $response->output = $session;
                 $response->status = 200;
                 $response->message = 'Success';
               } else {
                 $response->messageDetail = $dbResponseOfSession->error;
+                $response->status = 500;
                 throw new Exception('Internal server error');
               }
             } else {
-              throw new Exception('Internal server error');
+              $response->status = 500;
+              throw new Exception('Wrong username or password');
             }
           } else {
-            throw new Exception('Internal server error');
+            $response->status = 500;
+            throw new Exception('Wrong username or password');
           }
         } else {
           $response->messageDetail = $dbResponseOfUser->error;
+          $response->status = 500;
           throw new Exception('Internal server error');
         }
       } else {
-        throw new Exception('This method is not supported');
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
-      $response->status = 500;
+
+      $response->message = $e->getMessage();
+    }
+    echo $response->toJson();
+  }
+
+  public function processLogin($session)
+  {
+    $profile = [];
+    $dbResponse = $this->m_db->selectByCustom('users', 'session', $session);
+    print_r($dbResponse->output->row_array());
+    print_r($_SESSION);
+    if (!$dbResponse->error['code']) {
+      $profile['username'] = $dbResponse->output->row_array()['username'];
+      $profile['roleId'] = $dbResponse->output->row_array()['roleId'];
+      $profile['session'] = $session;
+      $this->m_auth->setSession($profile);
+      if ($profile['roleId'] == 1) {
+        redirect('admin');
+      } else if ($profile['roleId'] == 2) {
+        redirect('supervisor');
+      } else {
+        redirect('staff');
+      }
+    } else {
+      throw new Exception('Internal server error');
+    }
+  }
+
+  public function logout()
+  {
+    header('Content-Type: application/json');
+    $response = new ApiResponse();
+
+    try {
+      if ($this->input->method() == 'post') {
+        $data = json_decode($this->input->raw_input_stream, true);
+        $this->table = 'users';
+        $dbResponse = $this->m_db->updateByCustom($this->table, ['session' => null], 'username', $data['username']);
+        if (!$dbResponse->error['code']) {
+          $response->status = 200;
+          $response->message = 'Success';
+        } else {
+          $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
+          throw new Exception('Internal server error');
+        }
+      } else {
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
+      }
+    } catch (Exception $e) {
       $response->message = $e->getMessage();
     }
     echo $response->toJson();

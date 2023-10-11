@@ -7,22 +7,21 @@ class M_auth extends CI_Model
 	{
 		parent::__construct();
 		$this->load->model(['m_db']);
+		$this->load->library('session');
 	}
-	public function setSession($session, $id)
+	public function setSession($data)
 	{
-		$data = [
-			'session' => $session
-		];
-		$this->m_db->update('users', $data, $id);
-		$this->session->set_userdata($data);
+		foreach($data as $key => $value) {
+			$this->session->set_userdata($key, $value);
+		}
 	}
 
 	public function unsetSession($id)
 	{
 		$data = [
-			'session' => ''
+			'session' => null
 		];
 		$this->m_db->update('users', $data, $id);
-		$this->session->unset_userdata('session');
+		$this->session->unset_userdata();
 	}
 }
