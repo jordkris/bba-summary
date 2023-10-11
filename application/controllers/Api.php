@@ -4,27 +4,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Api extends CI_Controller
 {
   public $table;
-  public $session;
+  public $webSession;
   public function __construct()
   {
     parent::__construct();
     $this->load->model(['m_auth', 'm_db']);
     $header = $this->input->request_headers();
     $this->table = isset($header['table']) ? $header['table'] : null;
-    $this->session = isset($header['session']) ? $header['session'] : null;
+    $this->webSession = isset($header['session']) ? $header['session'] : null;
   }
 
-  private function checkSession()
-  {
-    $status = false;
-    if ($this->session) {
-      $dbResponse = $this->m_db->selectByCustom('users', 'session', $this->session);
-      if (!$dbResponse->error['code'] && $dbResponse->output->num_rows() > 0) {
-        $status = true;
-      }
-    }
-    return $status;
-  }
+  
   public function getAll()
   {
     header('Content-Type: application/json');
@@ -36,7 +26,7 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->checkSession()) {
+        if (!$this->m_auth->checkSession($this->webSession)) {
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
@@ -71,7 +61,7 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->checkSession()) {
+        if (!$this->m_auth->checkSession($this->webSession)) {
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
@@ -110,7 +100,7 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->checkSession()) {
+        if (!$this->m_auth->checkSession($this->webSession)) {
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
@@ -146,7 +136,7 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->checkSession()) {
+        if (!$this->m_auth->checkSession($this->webSession)) {
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
@@ -184,7 +174,7 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->checkSession()) {
+        if (!$this->m_auth->checkSession($this->webSession)) {
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
@@ -221,10 +211,10 @@ class Api extends CI_Controller
         if (!$dbResponseOfUser->error['code']) {
           if ($dbResponseOfUser->output->num_rows() > 0) {
             if (md5($data['password']) == $dbResponseOfUser->output->row_array()['password']) {
-              $session = md5(time());
-              $dbResponseOfSession = $this->m_db->update($this->table, ['session' => $session], $dbResponseOfUser->output->row_array()['id']);
+              $newSession = md5(time());
+              $dbResponseOfSession = $this->m_db->update($this->table, ['session' => $newSession], $dbResponseOfUser->output->row_array()['id']);
               if (!$dbResponseOfSession->error['code']) {
-                $response->output = $session;
+                $response->output = $newSession;
                 $response->status = 200;
                 $response->message = 'Success';
               } else {
@@ -256,16 +246,15 @@ class Api extends CI_Controller
     echo $response->toJson();
   }
 
-  public function processLogin($session)
+  public function processLogin($redirectSession)
   {
     $profile = [];
-    $dbResponse = $this->m_db->selectByCustom('users', 'session', $session);
-    print_r($dbResponse->output->row_array());
-    print_r($_SESSION);
+    $dbResponse = $this->m_db->selectByCustom('users', 'session', $redirectSession);
     if (!$dbResponse->error['code']) {
       $profile['username'] = $dbResponse->output->row_array()['username'];
       $profile['roleId'] = $dbResponse->output->row_array()['roleId'];
-      $profile['session'] = $session;
+      $profile['session'] = $redirectSession;
+      print_r($profile['username']);
       $this->m_auth->setSession($profile);
       if ($profile['roleId'] == 1) {
         redirect('admin');
