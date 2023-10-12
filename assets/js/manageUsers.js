@@ -2,7 +2,7 @@ let session=localStorage.getItem("session");
 let baseUrl=localStorage.getItem("baseUrl");
 let t=$("#users").DataTable({
 	ajax: {
-		url: baseUrl+'api/getAll',
+		url: baseUrl+'/api/getAll',
 		type: "GET",
 		beforeSend: (request) => {
 			request.setRequestHeader("session", session);

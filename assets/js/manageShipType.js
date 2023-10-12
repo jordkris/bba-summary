@@ -1,10 +1,10 @@
 $("#shipType").DataTable({
 	ajax: {
-		url: localStorage.getItem("baseUrl")+'api/getAll',
+		url: localStorage.getItem("baseUrl")+'/api/getAll',
 		type: "GET",
 		beforeSend: (request) => {
 			request.setRequestHeader("session", localStorage.getItem("session"));
-			request.setRequestHeader("table", "shipType");
+			request.setRequestHeader("table", "shiptype");
 		},
 		dataSrc: "output",
 	},

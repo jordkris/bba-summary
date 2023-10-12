@@ -168,7 +168,7 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                  <button id="submitBtn" class="btn btn-primary d-grid w-100">Sign in</button>
                 </div>
               </form>
             </div>
@@ -194,12 +194,13 @@
     <script src="<?= base_url(); ?>/assets/js/main.js"></script>
 
     <!-- Page JS -->
+    <script>
+      localStorage.setItem('baseUrl','<?= base_url(); ?>'.slice(0,-1));
+    </script>
     <script src="<?= base_url(); ?>/assets/js/login.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script>
-      localStorage.setItem('baseUrl','<?= base_url(); ?>');
-    </script>
+    
   </body>
 </html>

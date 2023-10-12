@@ -254,7 +254,6 @@ class Api extends CI_Controller
       $profile['username'] = $dbResponse->output->row_array()['username'];
       $profile['roleId'] = $dbResponse->output->row_array()['roleId'];
       $profile['session'] = $redirectSession;
-      print_r($profile['username']);
       $this->m_auth->setSession($profile);
       if ($profile['roleId'] == 1) {
         redirect('admin');
