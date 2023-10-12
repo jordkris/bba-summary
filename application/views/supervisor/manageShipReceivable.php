@@ -3,17 +3,12 @@
   <div class="card">
     <h5 class="card-header"><?= $title; ?></h5>
     <div class="card-body">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data User</button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data Piutang Kapal</button>
       <div class="table-responsive-lg">
-        <table id="users" class="table table-striped">
+        <table id="shipName" class="table table-striped">
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Created Date</th>
-              <th>Last Updated Date</th>
               <th>Action</th>
             </tr>
           </thead>

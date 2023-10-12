@@ -13,13 +13,10 @@ class M_auth extends CI_Model
 		$this->session->set_userdata($data);
 	}
 
-	public function unsetSession($id)
+	public function unsetSession($username)
 	{
-		$data = [
-			'session' => null
-		];
-		$this->m_db->update('users', $data, $id);
-		$this->session->unset_userdata();
+		$this->m_db->updateByCustom('users', ['session' => null], 'username', $username);
+		$this->session->sess_destroy();
 	}
 	public function checkSession($webSession)
 	{

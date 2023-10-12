@@ -9,7 +9,7 @@ class Admin extends CI_Controller
     parent::__construct();
     $this->load->model(['m_auth', 'm_db']);
     $this->webSession = $this->session->userdata('session');
-    if (!$this->m_auth->checkSession($this->webSession)) redirect('login');
+    if (!$this->m_auth->checkSession($this->webSession)) redirect('auth');
   }
 
   private function getRoleName($roleId)
@@ -26,14 +26,71 @@ class Admin extends CI_Controller
       'session' => $this->session->userdata('session')
     ];
   }
+
+  private function getAccessMenu() {
+    return $this->db->query('
+      SELECT m.name, m.path, m.icon 
+      FROM accessmenu am 
+      JOIN menu m ON am.menuId = m.id
+      JOIN role r ON am.roleId = r.id
+      WHERE r.id = 1
+    ')->result_array();
+  }
   public function index()
   {
-    $data['title'] = 'Manage Users';
+   redirect('admin/manageUsers'); 
+  }
+
+  public function manageUsers() {
+    $data['title'] = 'Kelola Users';
     $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
     $this->load->view('admin/manageUsers');
+    $this->load->view('template/footer');
+  }
+
+  public function manageShipName() {
+    $data['title'] = 'Kelola Nama Kapal';
+    $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
+    $this->load->view('template/header', $data);
+    $this->load->view('template/sidebar');
+    $this->load->view('template/navbar');
+    $this->load->view('admin/manageShipName');
+    $this->load->view('template/footer');
+  }
+
+  public function manageShipType() {
+    $data['title'] = 'Kelola Tipe Kapal';
+    $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
+    $this->load->view('template/header', $data);
+    $this->load->view('template/sidebar');
+    $this->load->view('template/navbar');
+    $this->load->view('admin/manageShipType');
+    $this->load->view('template/footer');
+  }
+  public function manageShipOwner() {
+    $data['title'] = 'Kelola Pemilik Kapal';
+    $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
+    $this->load->view('template/header', $data);
+    $this->load->view('template/sidebar');
+    $this->load->view('template/navbar');
+    $this->load->view('admin/manageShipOwner');
+    $this->load->view('template/footer');
+  }
+  public function manageBranch() {
+    $data['title'] = 'Kelola Cabang';
+    $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
+    $this->load->view('template/header', $data);
+    $this->load->view('template/sidebar');
+    $this->load->view('template/navbar');
+    $this->load->view('admin/manageBranch');
     $this->load->view('template/footer');
   }
 }
