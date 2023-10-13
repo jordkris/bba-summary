@@ -33,22 +33,22 @@ class Staff extends CI_Controller
       FROM accessmenu am 
       JOIN menu m ON am.menuId = m.id
       JOIN role r ON am.roleId = r.id
-      WHERE r.id = 3
+      WHERE r.id = '.$this->session->userdata('roleId').'
     ')->result_array();
   }
   public function index()
   {
-   redirect('staff/manageShips'); 
+   redirect('staff/manageShipData'); 
   }
 
-  public function manageShips() {
+  public function manageShipData() {
     $data['title'] = 'Kelola Data Kapal';
     $data['profile'] = $this->getProfile();
     $data['menu'] = $this->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
-    $this->load->view('staff/manageShips');
+    $this->load->view('staff/manageShipData');
     $this->load->view('template/footer');
   }
 }

@@ -33,7 +33,7 @@ class Supervisor extends CI_Controller
       FROM accessmenu am 
       JOIN menu m ON am.menuId = m.id
       JOIN role r ON am.roleId = r.id
-      WHERE r.id = 2
+      WHERE r.id = '.$this->session->userdata('roleId').'
     ')->result_array();
   }
   public function index()

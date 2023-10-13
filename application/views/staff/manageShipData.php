@@ -5,7 +5,7 @@
     <div class="card-body">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data Kapal</button>
       <div class="table-responsive-lg">
-        <table id="ships" class="table table-striped">
+        <table id="shipData" class="table table-striped">
           <thead>
             <tr>
               <th>#</th>

@@ -9,11 +9,7 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Created Date</th>
-              <th>Last Updated Date</th>
+              <th>Nama</th>
               <th>Action</th>
             </tr>
           </thead>
