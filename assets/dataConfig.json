@@ -1,0 +1,216 @@
+{
+  "users": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id user"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama User"
+        }
+      },
+      {
+        "key": "username",
+        "type": "InputBox",
+        "options": {
+          "label": "Username",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Username"
+        }
+      },
+      {
+        "key": "roleId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Role",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Jenis role",
+          "options": [
+            {
+              "value": "1",
+              "label": "Admin"
+            },
+            {
+              "value": "2",
+              "label": "Supervisor"
+            },
+            {
+              "value": "3",
+              "label": "Staff"
+            }
+          ]
+        }
+      },
+      {
+        "key": "createdDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Created Date",
+          "type": "datetime-local",
+          "isEnabled": false,
+          "isReadOnly": true,
+          "help": "Tanggal akun dibuat"
+        }
+      },
+      {
+        "key": "updatedDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Updated Date",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Tanggal akun terakhir di-edit"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "username": "",
+      "password": "",
+      "name": "",
+      "roleId": "",
+      "session": "",
+      "createdDate": "",
+      "updatedDate": ""
+    }
+  },
+  "shipname": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id nama kapal"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Kapal",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kapal"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
+  "shiptype": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id tipe kapal"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Tipe Kapal",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama tipe kapal"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
+  "shipowner": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id pemilik kapal"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Pemilik Kapal",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama Pemilik Kapal"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
+  "branch": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id cabang"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Cabang",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama cabang"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  }
+
+}

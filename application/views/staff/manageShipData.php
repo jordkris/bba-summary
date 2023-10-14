@@ -3,7 +3,7 @@
   <div class="card">
     <h5 class="card-header"><?= $title; ?></h5>
     <div class="card-body">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Tambah Data Kapal</button>
+      <button type="button" class="btn btn-primary" onclick="addData('Tambah Data Kapal', 'shipdata')">Tambah Data Kapal <i class="bx bx-plus"></i></button>
       <div class="table-responsive-lg">
         <table id="shipData" class="table table-striped">
           <thead>

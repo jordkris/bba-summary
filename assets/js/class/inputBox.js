@@ -1,9 +1,10 @@
 class InputBox {
-  constructor(options, value) {
+  constructor(id, options, value) {
+    this.id=id;
     this.label=options.label;
     this.type=options.type;
-    this.name=options.name;
     this.isEnabled=options.isEnabled;
+    this.isReadOnly=options.isReadOnly;
     this.help=options.help;
     this.value=value;
   }
@@ -14,16 +15,18 @@ class InputBox {
           <input
             type="${this.type}"
             class="form-control"
-            id="floatingInput"
-            name="${this.name}"
+            id="${this.id}"
+            name="${this.id}"
             aria-describedby="floatingInputHelp"
             ${this.isEnabled? "":"disabled"}
+            ${this.isReadOnly? "readonly":""}
             value="${this.value}"
           />
-          <label for="floatingInput">${this.label}</label>
-          <div id="floatingInputHelp" class="form-text">
+          <label>${this.label}</label>
+          <div class="form-text">
             ${this.help==''? '':'<i class="bx bx-info-circle"></i>'+this.help} 
           </div>
+          <div class="dropdown-divider"></div>
         </div>
       </div>
     `;
