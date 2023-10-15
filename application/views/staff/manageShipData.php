@@ -12,7 +12,8 @@
               <th>Nama Kapal</th>
               <th>Tipe Kapal</th>
               <th>Bendera</th>
-              <th>GRT</th>
+              <th>Status</th>
+              <!-- <th>GRT</th>
               <th>Pemilik Kapal</th>
               <th>Kegiatan</th>
               <th>Jumlah Muatan</th>
@@ -21,7 +22,7 @@
               <th>Sandar</th>
               <th>Finish Load / Disch</th>
               <th>SPB Terbit</th>
-              <th>Wasting Time</th>
+              <th>Wasting Time</th> -->
               <th>Action</th>
             </tr>
           </thead>

@@ -1,5 +1,6 @@
 let session=localStorage.getItem("session");
 let baseUrl=localStorage.getItem("baseUrl");
+let roleId=localStorage.getItem("roleId");
 
 let dataConfig=new Promise((resolve, reject) => {
   try {
@@ -40,27 +41,122 @@ let showAlert=(alertDom, color, message) => {
 `);
 }
 
-/**
- * Reads data from the specified DOM element and populates a DataTable with the retrieved data.
- *
- * @param {string} dtDom - The DOM element containing the DataTable.
- * @param {string} table - The name of the table to retrieve data from.
- * @param {array} columnsConfig - The configuration for the columns of the DataTable.
- * @return {void} 
- */
-let readData=(dtDom, table, columnsConfig) => {
-  $(dtDom).DataTable({
-    ajax: {
-      url: baseUrl+'/api/getAll',
+let calculateWastingTime=() => {
+  $('#issuedTimeSPB,#finishLoad').change((e) => {
+    let startTime=moment($('#finishLoad').val());
+    let endTime=moment($('#issuedTimeSPB').val());
+    let duration=moment.duration(endTime.diff(startTime));
+    const years=Math.floor(duration.asYears());
+    duration.subtract(moment.duration(years, 'years'));
+    const months=Math.floor(duration.asMonths());
+    duration.subtract(moment.duration(months, 'months'));
+    const weeks=Math.floor(duration.asWeeks());
+    duration.subtract(moment.duration(weeks, 'weeks'));
+    const days=Math.floor(duration.asDays());
+    duration.subtract(moment.duration(days, 'days'));
+    const hours=Math.floor(duration.asHours());
+    duration.subtract(moment.duration(hours, 'hours'));
+    const minutes=Math.floor(duration.asMinutes());
+    duration.subtract(moment.duration(minutes, 'minutes'));
+    const seconds=Math.floor(duration.asSeconds());
+    let intervalTime='';
+    if (years!=0) {
+      intervalTime=`${years} tahun${months==0? '':' '+months+' bulan'}`;
+    } else if (months!=0) {
+      intervalTime=`${months} bulan${weeks==0? '':' '+weeks+' minggu'}`;
+    } else if (weeks!=0) {
+      intervalTime=`${weeks} minggu${days==0? '':' '+days+' hari'}`;
+    } else if (days!=0) {
+      intervalTime=`${days} hari${hours==0? '':' '+hours+' jam'}`;
+    } else if (hours!=0) {
+      intervalTime=`${hours} jam${minutes==0? '':' '+minutes+' menit'}`;
+    } else if (minutes!=0) {
+      intervalTime=`${minutes} menit${seconds==0? '':' '+seconds+' detik'}`;
+    } else {
+      intervalTime=`${seconds} detik`;
+    }
+    $('#wastingTime').val(intervalTime);
+  });
+}
+
+let setReceivableAlert=() => {
+  $('#invoiceDeliveryTime').change((e) => {
+    let invoiceDeliveryTime=moment($('#invoiceDeliveryTime').val());
+    $('#dueDate').val(moment(invoiceDeliveryTime).add(7, 'days').format('YYYY-MM-DDTHH:mm'));
+    $('#firstAlert').val(moment(invoiceDeliveryTime).add(9, 'days').format('YYYY-MM-DDTHH:mm'));
+    $('#secondAlert').val(moment(invoiceDeliveryTime).add(11, 'days').format('YYYY-MM-DDTHH:mm'));
+    $('#thirdAlert').val(moment(invoiceDeliveryTime).add(13, 'days').format('YYYY-MM-DDTHH:mm'));
+  });
+}
+
+let getRelationData=async (id, table, column) => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+"/api/getById/"+id,
       type: "GET",
       beforeSend: (request) => {
         request.setRequestHeader("session", session);
         request.setRequestHeader("table", table);
       },
-      dataSrc: "output",
-    },
+      success: (response) => {
+        if (response.status==200) {
+          if (table=='flag') {
+            response.output[column]=`<span class="fi fi-${id.toLowerCase()}"></span> `+response.output[column];
+          }
+          resolve(response.output[column]);
+        } else {
+          reject(response.message);
+        }
+      },
+      error: (error) => {
+        reject(error.responseJSON.message);
+      },
+    });
+  });
+}
+
+/**
+ * Reads data from the API and populates a DataTable with the retrieved data.
+ *
+ * @param {string} dtDom - The DOM element where the DataTable will be rendered.
+ * @param {string} table - The name of the table to fetch data from.
+ * @param {object[]} columnsConfig - An array of column configuration objects.
+ * @param {object[]|null} relationConfig - An optional array of relation configuration objects.
+ * @return {Promise<void>} A promise that resolves when the DataTable is populated.
+ */
+let readData=async (dtDom, table, columnsConfig, relationConfig=null, customWhere=null) => {
+  let data=await new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+`/api/getAll${customWhere? `?${customWhere['key']}=${customWhere['value']}`:''}`,
+      type: "GET",
+      beforeSend: (request) => {
+        request.setRequestHeader("session", session);
+        request.setRequestHeader("table", table);
+      },
+      success: (response) => {
+        if (response.status==200) {
+          resolve(response.output);
+        } else {
+          reject(response.message);
+        }
+      },
+      error: (error) => {
+        reject(error.responseJSON.message);
+      },
+    });
+  });
+  if (relationConfig) {
+    for (rc of relationConfig) {
+      for (d of data) {
+        d[rc.sourceColumn]=await getRelationData(d[rc.sourceColumn], rc.table, rc.column);
+      }
+    }
+  }
+  $(dtDom).DataTable({
+    data: data,
     columns: columnsConfig
   });
+
 }
 
 /**
@@ -86,17 +182,18 @@ let showData=async (title, table, id, editMode=false) => {
       request.setRequestHeader("session", session);
       request.setRequestHeader("table", table);
     },
-    dataSrc: "output",
-    success: (response) => {
+    success: async (response) => {
       if (response.status==200) {
         let form=new FormBuilder(data, response.output, editMode, table);
-        $('#bbaModalBody').html(form.generate());
+        $('#bbaModalBody').html(await form.generate());
+        calculateWastingTime();
+        setReceivableAlert();
       } else {
         showAlert('#bbaModalBody', 'danger', `(${response.status}) ${response.message}`);
       }
       if (editMode) {
         $('#bbaModalFooter').html(`
-          <button id="submitEdit" type="button" class="btn btn-primary" style="float: right;" onclick="submitEdit('${table}', '${response.output.id}')">
+          <button id="submitEdit" type="button" class="btn btn-success" style="float: right;" onclick="submitEdit('${table}', '${response.output.id}')">
             Simpan <i class="bx bx-save"></i>
           </button>
         `);
@@ -131,9 +228,11 @@ let addData=async (title, table) => {
   let intervalDate;
   let data=(await dataConfig)[table].inputConfig;
   let form=new FormBuilder(data, (await dataConfig)[table].outputConfig, table);
-  $('#bbaModalBody').html(form.generate());
+  $('#bbaModalBody').html(await form.generate());
+  calculateWastingTime();
+  setReceivableAlert();
   $('#bbaModalFooter').html(`
-    <button id="submitAdd" type="button" class="btn btn-primary" style="float: right;" onclick="submitAdd('${table}')">
+    <button id="submitAdd" type="button" class="btn btn-success" style="float: right;" onclick="submitAdd('${table}')">
       Simpan <i class="bx bx-save"></i>
     </button>
   `);
@@ -315,6 +414,32 @@ let submitDelete=(table, id) => {
   });
 }
 
+let publishShipData=(id) => {
+  $.ajax({
+    url: baseUrl+"/api/update/"+id,
+    type: "POST",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'shipdata');
+    },
+    data: JSON.stringify({
+      isPublished: 1
+    }),
+    dataType: "json",
+    contentType: "application/json",
+    success: (response) => {
+      if (response.status==200) {
+        location.reload();
+      } else {
+        console.error(response.message); 
+      }
+    },
+    error: (error) => {
+      console.error(error.responseJSON.message);
+    },
+  });
+}
+
 // manageUsers
 readData('#users', 'users', [
   {
@@ -419,13 +544,114 @@ readData('#branch', 'branch', [
     }
   },
 ]);
-
-// manageShipData
-readData('#ships', 'ship', [
-
+// manageActivity
+readData('#activity', 'activity', [
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      return meta.row+1;
+    }
+  },
+  { data: "name" },
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      return `
+        <button class="btn btn-sm btn-primary" onclick="showData('Detail Kegiatan', 'activity', '${data}', false)"><i class='bx bx-info-circle'></i></button>
+        <button class="btn btn-sm btn-warning" onclick="showData('Edit Kegiatan', 'activity', '${data}', true)"><i class='bx bx-edit'></i></button>
+        <button class="btn btn-sm btn-danger" onclick="deleteData('Hapus Kegiatan', 'activity', '${data}')"><i class="bx bx-trash"></i></button>
+      `;
+    }
+  },
 ]);
 
-// manageShipReceivableData
-readData('#shipReceivable', 'ship', [
+(async () => {
+  // manageShipData
+  await readData('#shipData', 'shipData', [
+    {
+      data: "id",
+      render: (data, type, row, meta) => {
+        return meta.row+1;
+      }
+    },
+    { data: "shipId" },
+    { data: "shipTypeId" },
+    { data: "flagId" },
+    {
+      data: "isPublished",
+      render: (data, type, row, meta) => {
+        return `<span class="badge rounded-pill bg-${data=='0'? 'warning':'success'}">${data=='0'? 'PENDING':'PUBLISHED'}</span>`
+      }
+    },
+    {
+      data: "id",
+      render: (data, type, row, meta) => {
+        let publishedButton='';
+        if (roleId!=3) {
+          publishedButton=`
+          <button class="btn btn-sm btn-success" onclick="publishShipData('${data}')" ${row.isPublished == 1? 'disabled':''}><i class="bx bxs-cloud-upload"></i></button>
+          `;
+        }
+        return `
+          <button class="btn btn-sm btn-primary" onclick="showData('Detail Data Kapal', 'shipdata', '${data}', false)"><i class='bx bx-info-circle'></i></button>
+          <button class="btn btn-sm btn-warning" onclick="showData('Edit Data Kapal', 'shipdata', '${data}', true)"><i class='bx bx-edit'></i></button>
+          <button class="btn btn-sm btn-danger" onclick="deleteData('Hapus Data Kapal', 'shipdata', '${data}')"><i class="bx bx-trash"></i></button>
+        `+publishedButton;
+      }
+    },
+  ], [{
+    table: 'shipname',
+    column: 'name',
+    sourceColumn: 'shipId'
+  }, {
+    table: 'shiptype',
+    column: 'name',
+    sourceColumn: 'shipTypeId'
+  }, {
+    table: 'flag',
+    column: 'name',
+    sourceColumn: 'flagId'
+  }], roleId!=3? null:{
+    key: 'isPublished',
+    value: '0',
+  });
+  // manageShipReceivableData
+  await readData('#shipReceivable', 'shipreceivabledata', [
+    {
+      data: "id",
+      render: (data, type, row, meta) => {
+        return meta.row+1;
+      }
+    },
+    { data: "shipId" },
+    { data: "ownerId" },
+    {
+      data: "invoiceStatusId", render: (data, type, row, meta) => {
+        return `<span class="badge rounded-pill bg-${data=='BELUM DIKIRIM'? 'warning':'success'}">${data}</span>`
+      }
+    },
+    {
+      data: "id",
+      render: (data, type, row, meta) => {
+        return `
+        <button class="btn btn-sm btn-primary" onclick="showData('Detail Data Piutang Kapal', 'shipreceivabledata', '${data}', false)"><i class='bx bx-info-circle'></i></button>
+        <button class="btn btn-sm btn-warning" onclick="showData('Edit Data Piutang Kapal', 'shipreceivabledata', '${data}', true)"><i class='bx bx-edit'></i></button>
+        <button class="btn btn-sm btn-danger" onclick="deleteData('Hapus Data Piutang Kapal', 'shipreceivabledata', '${data}')"><i class="bx bx-trash"></i></button>
+      `;
+      }
+    },
+  ], [{
+    table: 'shipname',
+    column: 'name',
+    sourceColumn: 'shipId'
+  }, {
+    table: 'shipowner',
+    column: 'name',
+    sourceColumn: 'ownerId'
+  }, {
+    table: 'invoicestatus',
+    column: 'name',
+    sourceColumn: 'invoiceStatusId'
+  }]);
+})();
 
-]);

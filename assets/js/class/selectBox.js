@@ -5,19 +5,40 @@ class SelectBox {
     this.name=options.name;
     this.isEnabled=options.isEnabled;
     this.isReadOnly=options.isReadOnly;
-    this.options=options.options;
+    this.optionsTable=options.optionsTable;
     this.value=value;
     this.help=options.help;
   }
-  generate() {
+  async generate() {
+    let optionsData=await new Promise((resolve, reject) => {
+      $.ajax({
+        url: baseUrl+'/api/getAll',
+        type: "GET",
+        beforeSend: (request) => {
+          request.setRequestHeader("session", session);
+          request.setRequestHeader("table", this.optionsTable);
+        },
+        success: (response) => {
+          if (response.status==200) {
+            resolve(response.output);
+          } else {
+            reject(response.message);
+          }
+        }, error: (error) => {
+          reject(error);
+        }
+      });
+    });
+
     let selectOption='';
-    this.options.forEach((option) => {
-      selectOption+=`<option value="${option.value}" ${option.value==this.value? 'selected':''}>${option.label}</option>`;
+    optionsData.forEach((option) => {
+      selectOption+=`<option value="${option.id}" ${option.id==this.value? 'selected':''}>${option.name}</option>`;
     });
     return `
       <div class="col-lg-6">
         <div class="form-floating">
           <select id="${this.id}" class="form-select" ${this.isEnabled? "":"disabled"} ${this.isReadOnly? "readonly":""} name="${this.id}">
+            <option value=""></option>
             ${selectOption}
           </select>
           <label>${this.label}</label>
@@ -29,4 +50,5 @@ class SelectBox {
       </div>
     `;
   }
+
 }
