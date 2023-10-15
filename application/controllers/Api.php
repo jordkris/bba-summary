@@ -292,4 +292,58 @@ class Api extends CI_Controller
     }
     echo $response->toJson();
   }
+
+  public function getMonthlyGrowth()
+  {
+    header('Content-Type: application/json');
+    $response = new ApiResponse();
+
+    try {
+      if ($this->input->method() == 'get') {
+        $dbResponse = $this->m_db->getMonthlyGrowth();
+        if (!$dbResponse->error['code']) {
+          $response->output = $dbResponse->output->result_array();
+          $response->status = 200;
+          $response->message = 'Success';
+        } else {
+          $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
+          throw new Exception('Internal server error');
+        }
+      } else {
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
+      }
+    } catch (Exception $e) {
+      $response->message = $e->getMessage();
+    }
+    echo $response->toJson();
+  }
+
+  public function getShipBranchDaily()
+  {
+    header('Content-Type: application/json');
+    $response = new ApiResponse();
+
+    try {
+      if ($this->input->method() == 'get') {
+        $dbResponse = $this->m_db->getShipBranchDaily();
+        if (!$dbResponse->error['code']) {
+          $response->output = $dbResponse->output->result_array();
+          $response->status = 200;
+          $response->message = 'Success';
+        } else {
+          $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
+          throw new Exception('Internal server error');
+        }
+      } else {
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
+      }
+    } catch (Exception $e) {
+      $response->message = $e->getMessage();
+    }
+    echo $response->toJson();
+  }
 }

@@ -315,7 +315,7 @@
         "type": "InputBox",
         "options": {
           "label": "GRT",
-          "type": "text",
+          "type": "number",
           "isEnabled": true,
           "isReadOnly": false,
           "help": "Gross Register Tonnage"

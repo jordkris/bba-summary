@@ -175,7 +175,10 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     `,
     buttons: exportConfig ? exportConfig.buttons : ['colvis'],
     data: data,
-    columns: columnsConfig
+    columns: columnsConfig,
+    initComplete: () => {
+      $('.tableSpinner').hide();
+    }
   });
 
 }

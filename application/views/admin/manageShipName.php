@@ -14,6 +14,9 @@
             </tr>
           </thead>
           <tbody>
+            <div class="spinner-border text-success tableSpinner" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </tbody>
         </table>
       </div>
