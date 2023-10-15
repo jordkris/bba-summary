@@ -67,8 +67,8 @@
 <script src="<?= base_url(); ?>/assets/vendor/js/bootstrap.js"></script>
 <script src="<?= base_url(); ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-<script src="//unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
-<script src="//unpkg.com/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<!-- <script src="//unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script> -->
+<!-- <script src="//unpkg.com/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script src="<?= base_url(); ?>/assets/vendor/js/menu.js"></script>
@@ -88,11 +88,8 @@
 <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs4@1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.jqueryui.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/datatables-buttons@1.0.3/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script>
   localStorage.setItem('session', '<?= $profile['session']; ?>');
