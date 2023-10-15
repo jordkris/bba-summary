@@ -431,7 +431,7 @@ let publishShipData=(id) => {
       if (response.status==200) {
         location.reload();
       } else {
-        console.error(response.message); 
+        console.error(response.message);
       }
     },
     error: (error) => {
@@ -565,93 +565,91 @@ readData('#activity', 'activity', [
   },
 ]);
 
-(async () => {
-  // manageShipData
-  await readData('#shipData', 'shipData', [
-    {
-      data: "id",
-      render: (data, type, row, meta) => {
-        return meta.row+1;
-      }
-    },
-    { data: "shipId" },
-    { data: "shipTypeId" },
-    { data: "flagId" },
-    {
-      data: "isPublished",
-      render: (data, type, row, meta) => {
-        return `<span class="badge rounded-pill bg-${data=='0'? 'warning':'success'}">${data=='0'? 'PENDING':'PUBLISHED'}</span>`
-      }
-    },
-    {
-      data: "id",
-      render: (data, type, row, meta) => {
-        let publishedButton='';
-        if (roleId!=3) {
-          publishedButton=`
-          <button class="btn btn-sm btn-success" onclick="publishShipData('${data}')" ${row.isPublished == 1? 'disabled':''}><i class="bx bxs-cloud-upload"></i></button>
+// manageShipData
+await readData('#shipData', 'shipData', [
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      return meta.row+1;
+    }
+  },
+  { data: "shipId" },
+  { data: "shipTypeId" },
+  { data: "flagId" },
+  {
+    data: "isPublished",
+    render: (data, type, row, meta) => {
+      return `<span class="badge rounded-pill bg-${data=='0'? 'warning':'success'}">${data=='0'? 'PENDING':'PUBLISHED'}</span>`
+    }
+  },
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      let publishedButton='';
+      if (roleId!=3) {
+        publishedButton=`
+          <button class="btn btn-sm btn-success" onclick="publishShipData('${data}')" ${row.isPublished==1? 'disabled':''}><i class="bx bxs-cloud-upload"></i></button>
           `;
-        }
-        return `
+      }
+      return `
           <button class="btn btn-sm btn-primary" onclick="showData('Detail Data Kapal', 'shipdata', '${data}', false)"><i class='bx bx-info-circle'></i></button>
           <button class="btn btn-sm btn-warning" onclick="showData('Edit Data Kapal', 'shipdata', '${data}', true)"><i class='bx bx-edit'></i></button>
           <button class="btn btn-sm btn-danger" onclick="deleteData('Hapus Data Kapal', 'shipdata', '${data}')"><i class="bx bx-trash"></i></button>
         `+publishedButton;
-      }
-    },
-  ], [{
-    table: 'shipname',
-    column: 'name',
-    sourceColumn: 'shipId'
-  }, {
-    table: 'shiptype',
-    column: 'name',
-    sourceColumn: 'shipTypeId'
-  }, {
-    table: 'flag',
-    column: 'name',
-    sourceColumn: 'flagId'
-  }], roleId!=3? null:{
-    key: 'isPublished',
-    value: '0',
-  });
-  // manageShipReceivableData
-  await readData('#shipReceivable', 'shipreceivabledata', [
-    {
-      data: "id",
-      render: (data, type, row, meta) => {
-        return meta.row+1;
-      }
-    },
-    { data: "shipId" },
-    { data: "ownerId" },
-    {
-      data: "invoiceStatusId", render: (data, type, row, meta) => {
-        return `<span class="badge rounded-pill bg-${data=='BELUM DIKIRIM'? 'warning':'success'}">${data}</span>`
-      }
-    },
-    {
-      data: "id",
-      render: (data, type, row, meta) => {
-        return `
+    }
+  },
+], [{
+  table: 'shipname',
+  column: 'name',
+  sourceColumn: 'shipId'
+}, {
+  table: 'shiptype',
+  column: 'name',
+  sourceColumn: 'shipTypeId'
+}, {
+  table: 'flag',
+  column: 'name',
+  sourceColumn: 'flagId'
+}], roleId!=3? null:{
+  key: 'isPublished',
+  value: '0',
+});
+// manageShipReceivableData
+await readData('#shipReceivable', 'shipreceivabledata', [
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      return meta.row+1;
+    }
+  },
+  { data: "shipId" },
+  { data: "ownerId" },
+  {
+    data: "invoiceStatusId", render: (data, type, row, meta) => {
+      return `<span class="badge rounded-pill bg-${data=='BELUM DIKIRIM'? 'warning':'success'}">${data}</span>`
+    }
+  },
+  {
+    data: "id",
+    render: (data, type, row, meta) => {
+      return `
         <button class="btn btn-sm btn-primary" onclick="showData('Detail Data Piutang Kapal', 'shipreceivabledata', '${data}', false)"><i class='bx bx-info-circle'></i></button>
         <button class="btn btn-sm btn-warning" onclick="showData('Edit Data Piutang Kapal', 'shipreceivabledata', '${data}', true)"><i class='bx bx-edit'></i></button>
         <button class="btn btn-sm btn-danger" onclick="deleteData('Hapus Data Piutang Kapal', 'shipreceivabledata', '${data}')"><i class="bx bx-trash"></i></button>
       `;
-      }
-    },
-  ], [{
-    table: 'shipname',
-    column: 'name',
-    sourceColumn: 'shipId'
-  }, {
-    table: 'shipowner',
-    column: 'name',
-    sourceColumn: 'ownerId'
-  }, {
-    table: 'invoicestatus',
-    column: 'name',
-    sourceColumn: 'invoiceStatusId'
-  }]);
-})();
+    }
+  },
+], [{
+  table: 'shipname',
+  column: 'name',
+  sourceColumn: 'shipId'
+}, {
+  table: 'shipowner',
+  column: 'name',
+  sourceColumn: 'ownerId'
+}, {
+  table: 'invoicestatus',
+  column: 'name',
+  sourceColumn: 'invoiceStatusId'
+}]);
 
