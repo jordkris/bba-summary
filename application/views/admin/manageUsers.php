@@ -10,6 +10,10 @@
             <tr>
               <th>#</th>
               <th>Nama</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Created Date</th>
+              <th>Updated Date</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -20,4 +24,5 @@
     </div>
   </div>
 </div>
+<script src="<?= base_url(); ?>/assets/js/manage/manageUsers.js"></script>
 <!-- / Content -->

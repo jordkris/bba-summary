@@ -419,6 +419,16 @@
           "isReadOnly": true,
           "help": "Waktu yang diperlukan sejak finish sampai dengan SPB"
         }
+      },{
+        "key": "wastingTimeNumber",
+        "type": "InputBox",
+        "options": {
+          "label": "Wasting Time (minutes)",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Wasting Time dalam satuan menit"
+        }
       }
     ],
     "outputConfig": {
@@ -436,6 +446,7 @@
       "finishLoad": "",
       "issuedTimeSPB": "",
       "wastingTime": "",
+      "wastingTimeNumber": "",
       "isPublished": ""
     }
   },

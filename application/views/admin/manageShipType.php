@@ -9,7 +9,7 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
+              <th>Tipe Kapal</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -20,4 +20,5 @@
     </div>
   </div>
 </div>
+<script src="<?= base_url(); ?>/assets/js/manage/manageShipType.js"></script>
 <!-- / Content -->

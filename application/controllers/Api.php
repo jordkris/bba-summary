@@ -19,7 +19,6 @@ class Api extends CI_Controller
   {
     header('Content-Type: application/json');
     $response = new ApiResponse();
-    $customWhere = null;
     try {
       if ($this->input->method() == 'get') {
         if (!$this->table) {
@@ -30,11 +29,7 @@ class Api extends CI_Controller
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
-        if ($this->input->get()) {
-          $customWhere['key'] = array_keys($this->input->get())[0];
-          $customWhere['value'] = array_values($this->input->get())[0];
-        }
-        $dbResponse = $this->m_db->selectAll($this->table, $customWhere);
+        $dbResponse = $this->m_db->selectAll($this->table);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
           $response->status = 200;

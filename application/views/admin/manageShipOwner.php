@@ -9,7 +9,9 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
+              <th>Nama Pemilik Kapal</th>
+              <th>PIC</th>
+              <th>Kontak</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -20,4 +22,5 @@
     </div>
   </div>
 </div>
+<script src="<?= base_url(); ?>/assets/js/manage/manageShipOwner.js"></script>
 <!-- / Content -->

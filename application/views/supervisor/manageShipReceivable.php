@@ -11,7 +11,13 @@
               <th>#</th>
               <th>Nama Kapal</th>
               <th>Pemilik Kapal</th>
+              <th>Tanggal Invoice</th>
               <th>Status Invoice</th>
+              <th>Tanggal Kirim Invoice</th>
+              <th>Due date</th>
+              <th>Alert 1</th>
+              <th>Alert 2</th>
+              <th>Alert 3</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -22,4 +28,5 @@
     </div>
   </div>
 </div>
+<script src="<?= base_url(); ?>/assets/js/manage/manageShipReceivable.js"></script>
 <!-- / Content -->
