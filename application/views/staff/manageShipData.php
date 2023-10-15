@@ -36,5 +36,4 @@
     </div>
   </div>
 </div>
-<script src="<?= base_url(); ?>/assets/js/manage/manageShipData.js"></script>
 <!-- / Content -->

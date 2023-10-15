@@ -23,5 +23,4 @@
     </div>
   </div>
 </div>
-<script src="<?= base_url(); ?>/assets/js/manage/manageShipName.js"></script>
 <!-- / Content -->

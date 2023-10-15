@@ -177,7 +177,7 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     data: data,
     columns: columnsConfig,
     initComplete: () => {
-      $('.tableSpinner').hide();
+      $('.tableSpinner').remove();
     }
   });
 

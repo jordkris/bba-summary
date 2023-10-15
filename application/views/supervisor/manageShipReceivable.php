@@ -31,5 +31,4 @@
     </div>
   </div>
 </div>
-<script src="<?= base_url(); ?>/assets/js/manage/manageShipReceivable.js"></script>
 <!-- / Content -->
