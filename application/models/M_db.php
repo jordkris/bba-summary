@@ -92,9 +92,9 @@ class M_db extends CI_Model
       SELECT b.name AS branch, count(sd.id) AS total
       FROM shipdata sd
       JOIN branch b ON b.id = sd.branchId
-      WHERE DATE(issuedTimeSPB) = CURDATE()
-      GROUP BY branchId
-      ORDER BY COUNT(id) DESC;
+      WHERE DATE(sd.issuedTimeSPB) = CURDATE()
+      GROUP BY sd.branchId
+      ORDER BY COUNT(sd.id) DESC;
     ");
     $response->error = $this->db->error();
     return $response;
