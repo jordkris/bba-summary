@@ -566,7 +566,7 @@ readData('#activity', 'activity', [
 ]);
 
 // manageShipData
-readData('#shipData', 'shipData', [
+readData('#shipData', 'shipdata', [
   {
     data: "id",
     render: (data, type, row, meta) => {
