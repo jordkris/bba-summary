@@ -566,7 +566,7 @@ readData('#activity', 'activity', [
 ]);
 
 // manageShipData
-await readData('#shipData', 'shipData', [
+readData('#shipData', 'shipData', [
   {
     data: "id",
     render: (data, type, row, meta) => {
@@ -615,7 +615,7 @@ await readData('#shipData', 'shipData', [
   value: '0',
 });
 // manageShipReceivableData
-await readData('#shipReceivable', 'shipreceivabledata', [
+readData('#shipReceivable', 'shipreceivabledata', [
   {
     data: "id",
     render: (data, type, row, meta) => {
