@@ -160,13 +160,19 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
       },
     });
   });
+
   if (relationConfig) {
+    let current = 0;
+    let end = relationConfig.length * Object.keys(data).length;
     for (rc of relationConfig) {
       for (d of data) {
+        $('#datatableProgress > div').css('width', `${current/end*100}%`);
         d[rc.sourceColumn]=await getRelationData(d[rc.sourceColumn], rc.table, rc.column);
+        current++;
       }
     }
   }
+  $('#datatableProgress > div').css('width', '100%');
   $(dtDom).DataTable({
     dom: `
       <'row'<'col-lg-3'l><'col-lg-6 text-center'B><'col-lg-3'f>>
@@ -177,7 +183,7 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     data: data,
     columns: columnsConfig,
     initComplete: () => {
-      $('.tableSpinner').remove();
+      $('#datatableProgress').remove();
     }
   });
 

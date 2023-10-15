@@ -22,8 +22,8 @@
             </tr>
           </thead>
           <tbody>
-            <div class="spinner-border text-success tableSpinner" role="status">
-              <span class="visually-hidden">Loading...</span>
+            <div id="datatableProgress" class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </tbody>
         </table>
