@@ -52,7 +52,7 @@
     <?php foreach ($menu as $m) { ?>
       <li class="menu-item <?php if ($m['path'] == $this->uri->segment(1).'/'.$this->uri->segment(2)) echo 'active'; ?>">
         <a href="<?= base_url($m['path']); ?>" class="menu-link">
-          <i class="<?= base_url($m['icon']) ?>"></i>
+          <i class="<?= base_url($m['icon']) ?>"></i>&nbsp;
           <div data-i18n="Analytics"><?= $m['name']; ?></div>
         </a>
       </li>

@@ -3,15 +3,13 @@
   <div class="card">
     <h5 class="card-header"><?= $title; ?></h5>
     <div class="card-body">
-      <button type="button" class="btn btn-primary" onclick="addData('Tambah Data Piutang Kapal', 'shipreceivabledata')">Tambah Data Piutang Kapal <i class="bx bx-plus"></i></button>
+      <button type="button" class="btn btn-primary" onclick="addData('Tambah Kegiatan', 'activity')">Tambah Kegiatan <i class="bx bx-plus"></i></button>
       <div class="table-responsive-lg">
-        <table id="shipReceivable" class="table table-striped">
+        <table id="activity" class="table table-striped">
           <thead>
             <tr>
               <th>#</th>
-              <th>Nama Kapal</th>
-              <th>Pemilik Kapal</th>
-              <th>Status Invoice</th>
+              <th>Name</th>
               <th>Action</th>
             </tr>
           </thead>

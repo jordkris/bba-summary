@@ -8,9 +8,12 @@ class M_db extends CI_Model
     parent::__construct();
   }
 
-  public function selectAll($table)
+  public function selectAll($table, $customWhere = null)
   {
     $response = new DbResponse();
+    if ($customWhere) {
+      $this->db->where($customWhere['key'], $customWhere['value']);
+    }
     $response->output = $this->db->get($table);
     $response->error = $this->db->error();
     return $response;

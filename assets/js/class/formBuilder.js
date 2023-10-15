@@ -4,22 +4,21 @@ class FormBuilder {
     this.apiResponse=apiResponse;
     this.table=table;
   }
-  generate() {
+  async generate() {
     let value;
     let output=`<form id="formBbaModal"><div class="row">`;
-    this.data.forEach((input) => {
+    for (let input of this.data) {
       value=this.apiResponse[input.key];
       switch (input.type) {
         case 'InputBox':
           output+=new InputBox(input.key, input.options, value).generate();
           break;
         case 'SelectBox':
-          output+=new SelectBox(input.key, input.options, value).generate();
-          $(`#${input.options.id}`).selectpicker();
+          output+=await (new SelectBox(input.key, input.options, value)).generate();
         default:
         // no action
       }
-    });
+    }
     return output+`</div></form>`;
   }
 }

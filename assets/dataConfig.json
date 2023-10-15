@@ -35,6 +35,17 @@
         }
       },
       {
+        "key": "password",
+        "type": "InputBox",
+        "options": {
+          "label": "Password",
+          "type": "password",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Password (hash). Untuk mengubah ini silahkan <span class=\"badge rounded-pill bg-warning\" data-bs-target=\"#passwordModal\" data-bs-toggle=\"modal\" data-bs-dismiss=\"modal\" style=\"cursor:pointer\">Generate Hash <i class=\"bx bxs-shield-plus\"></i></span> baru"
+        }
+      },
+      {
         "key": "roleId",
         "type": "SelectBox",
         "options": {
@@ -42,20 +53,7 @@
           "isEnabled": true,
           "isReadOnly": false,
           "help": "Jenis role",
-          "options": [
-            {
-              "value": "1",
-              "label": "Admin"
-            },
-            {
-              "value": "2",
-              "label": "Supervisor"
-            },
-            {
-              "value": "3",
-              "label": "Staff"
-            }
-          ]
+          "optionsTable": "role"
         }
       },
       {
@@ -175,11 +173,35 @@
           "isReadOnly": false,
           "help": "Nama Pemilik Kapal"
         }
+      },
+      {
+        "key": "pic",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama PIC",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama PIC"
+        }
+      },
+      {
+        "key": "contact",
+        "type": "InputBox",
+        "options": {
+          "label": "Kontak",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Kontak yang bisa dihubungi"
+        }
       }
     ],
     "outputConfig": {
       "id": "",
-      "name": ""
+      "name": "",
+      "pic": "",
+      "contact": ""
     }
   },
   "branch": {
@@ -211,6 +233,322 @@
       "id": "",
       "name": ""
     }
+  },
+  "activity": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id kegiatan"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Kegiatan",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kegiatan"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
+  "shipdata": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id data kapal"
+        }
+      },
+      {
+        "key": "shipId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Nama Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kapal",
+          "optionsTable": "shipname"
+        }
+      },
+      {
+        "key": "shipTypeId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Tipe Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tipe kapal",
+          "optionsTable": "shiptype"
+        }
+      },
+      {
+        "key": "flagId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Bendera",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Bendera negara",
+          "optionsTable": "flag"
+        }
+      },
+      {
+        "key": "grt",
+        "type": "InputBox",
+        "options": {
+          "label": "GRT",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Gross Register Tonnage"
+        }
+      },
+      {
+        "key": "ownerId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Pemilik Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Pemilik kapal",
+          "optionsTable": "shipowner"
+        }
+      },
+      {
+        "key": "activityId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Kegiatan",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Kegiatan",
+          "optionsTable": "activity"
+        }
+      },
+      {
+        "key": "cargoQuantity",
+        "type": "InputBox",
+        "options": {
+          "label": "Jumlah Muatan",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Jumlah muatan"
+        }
+      },
+      {
+        "key": "branchId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Cabang",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Cabang",
+          "optionsTable": "branch"
+        }
+      },
+      {
+        "key": "eta",
+        "type": "InputBox",
+        "options": {
+          "label": "ETA",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Estimation Time of Arrival: Perkiraan waktu kedatangan kapal"
+        }
+      },
+      {
+        "key": "dockTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Sandar",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu sandar"
+        }
+      },
+      {
+        "key": "finishLoad",
+        "type": "InputBox",
+        "options": {
+          "label": "Finish Load / Disch",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu Finish Load / Discharge"
+        }
+      },
+      {
+        "key": "issuedTimeSPB",
+        "type": "InputBox",
+        "options": {
+          "label": "SPB Terbit",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu SPB terbit"
+        }
+      },
+      {
+        "key": "wastingTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Wasting Time",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Waktu yang diperlukan sejak finish sampai dengan SPB"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "shipId": "",
+      "shipTypeId": "",
+      "flag": "",
+      "grt": "",
+      "ownerId": "",
+      "activityId": "",
+      "cargoQuantity": "",
+      "branchId": "",
+      "eta": "",
+      "dockTime": "",
+      "finishLoad": "",
+      "issuedTimeSPB": "",
+      "wastingTime": "",
+      "isPublished": ""
+    }
+  },
+  "shipreceivabledata": {
+    "inputConfig": [
+      {
+        "key": "shipId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Nama Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kapal",
+          "optionsTable": "shipname"
+        }
+      },
+      {
+        "key": "ownerId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Nama Pemilik Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama pemilik kapal",
+          "optionsTable": "shipowner"
+        }
+      },
+      {
+        "key": "invoiceTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Tanggal Invoice",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu SPB terbit"
+        }
+      },
+      {
+        "key": "invoiceStatusId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Status Invoice",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Status invoice",
+          "optionsTable": "invoicestatus"
+        }
+      },
+      {
+        "key": "invoiceDeliveryTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Tanggal Kirim Invoice",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal kirim invoice"
+        }
+      },
+      {
+        "key": "dueDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Due Date",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Due date"
+        }
+      },{
+        "key": "firstAlert",
+        "type": "InputBox",
+        "options": {
+          "label": "Alert 1",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Alert pertama"
+        }
+      },{
+        "key": "secondAlert",
+        "type": "InputBox",
+        "options": {
+          "label": "Alert 2",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Alert kedua"
+        }
+      },{
+        "key": "thirdAlert",
+        "type": "InputBox",
+        "options": {
+          "label": "Alert 3",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Alert ketiga"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "shipId": "",
+      "ownerId": "",
+      "invoiceTime": "",
+      "invoiceStatusId": "",
+      "invoiceDeliveryTime": "",
+      "dueDate": "",
+      "firstAlert": "",
+      "secondAlert": "",
+      "thirdAlert": ""
+    }
   }
-
 }

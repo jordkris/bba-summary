@@ -93,4 +93,15 @@ class Admin extends CI_Controller
     $this->load->view('admin/manageBranch');
     $this->load->view('template/footer');
   }
+
+  public function manageActivity() {
+    $data['title'] = 'Kelola Kegiatan';
+    $data['profile'] = $this->getProfile();
+    $data['menu'] = $this->getAccessMenu();
+    $this->load->view('template/header', $data);
+    $this->load->view('template/sidebar');
+    $this->load->view('template/navbar');
+    $this->load->view('admin/manageActivity');
+    $this->load->view('template/footer');
+  }
 }

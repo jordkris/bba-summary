@@ -14,12 +14,12 @@ class Api extends CI_Controller
     $this->webSession = isset($header['session']) ? $header['session'] : null;
   }
 
-  
+
   public function getAll()
   {
     header('Content-Type: application/json');
     $response = new ApiResponse();
-
+    $customWhere = null;
     try {
       if ($this->input->method() == 'get') {
         if (!$this->table) {
@@ -30,7 +30,11 @@ class Api extends CI_Controller
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
-        $dbResponse = $this->m_db->selectAll($this->table);
+        if ($this->input->get()) {
+          $customWhere['key'] = array_keys($this->input->get())[0];
+          $customWhere['value'] = array_values($this->input->get())[0];
+        }
+        $dbResponse = $this->m_db->selectAll($this->table, $customWhere);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
           $response->status = 200;
@@ -54,7 +58,6 @@ class Api extends CI_Controller
   {
     header('Content-Type: application/json');
     $response = new ApiResponse();
-
     try {
       if ($this->input->method() == 'get') {
         if (!$this->table) {
@@ -73,7 +76,7 @@ class Api extends CI_Controller
             $response->message = 'Success';
           } else {
             $response->status = 404;
-            $response->message = 'Data user not found';
+            $response->message = 'Data not found';
           }
         } else {
           $response->messageDetail = $dbResponse->error;
