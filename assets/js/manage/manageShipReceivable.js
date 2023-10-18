@@ -7,7 +7,9 @@ readData('#shipReceivable', 'shipreceivabledata', [
     }
   },
   { data: "shipId" },
+  { data: "voyage" },
   { data: "ownerId" },
+  { data: "branchId" },
   { data: "invoiceTime", visible: false },
   {
     data: "invoiceStatusId",
@@ -49,14 +51,14 @@ readData('#shipReceivable', 'shipreceivabledata', [
       text: `<i class="bx bxs-cloud-download"></i> Export to CSV`,
       title: 'Data Piutang Kapal '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(14)
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(10)
       }
     }, {
       extend: 'excel',
       text: `<i class="bx bxs-cloud-download"></i> Export to Excel`,
       title: 'Data Piutang Kapal '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(14),
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(10),
         modifier: {
           page: 'current'
         }

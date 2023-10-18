@@ -10,6 +10,7 @@
             <tr>
               <th>#</th>
               <th>Nama Kapal</th>
+			  <th>Voyage</th>	
               <th>Tipe Kapal</th>
               <th>Bendera</th>
               <th>GRT</th>

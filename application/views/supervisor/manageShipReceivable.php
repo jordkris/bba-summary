@@ -10,7 +10,9 @@
             <tr>
               <th>#</th>
               <th>Nama Kapal</th>
+              <th>Voyage</th>
               <th>Pemilik Kapal</th>
+              <th>Cabang</th>
               <th>Tanggal Invoice</th>
               <th>Status Invoice</th>
               <th>Tanggal Kirim Invoice</th>

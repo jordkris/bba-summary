@@ -31,6 +31,9 @@ class SelectBox {
     });
 
     let selectOption='';
+    if (this.optionsTable=='branch'&&branchId!=1) {
+      optionsData=optionsData.filter(option => option.id==branchId);
+    }
     optionsData.forEach((option) => {
       selectOption+=`<option value="${option.id}" ${option.id==this.value? 'selected':''}>${option.name}</option>`;
     });

@@ -1,6 +1,7 @@
 let session=localStorage.getItem("session");
 let baseUrl=localStorage.getItem("baseUrl");
 let roleId=localStorage.getItem("roleId");
+let branchId=localStorage.getItem("branchId");
 
 let dataConfig=new Promise((resolve, reject) => {
   try {
@@ -104,6 +105,23 @@ let setReceivableAlert=() => {
   });
 }
 
+let setAdminAllBranch=() => {
+  $('#roleId').change((e) => {
+    if ($('#roleId').val()==1) {
+      $('#branchId').val('1');
+    } else {
+      $('#branchId').val('');
+    }
+  });
+  $('#branchId').change((e) => {
+    if ($('#branchId').val()=='1') {
+      $('#roleId').val('1');
+    } else {
+      $('#roleId').val('');
+    }
+  });
+}
+
 let getRelationData=async (id, table, column) => {
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -139,7 +157,7 @@ let getRelationData=async (id, table, column) => {
  * @param {object[]|null} relationConfig - An optional array of relation configuration objects.
  * @return {Promise<void>} A promise that resolves when the DataTable is populated.
  */
-let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConfig=null) => {
+let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConfig=null, customFilter=null) => {
   let data=await new Promise((resolve, reject) => {
     $.ajax({
       url: baseUrl+'/api/getAll',
@@ -160,10 +178,13 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
       },
     });
   });
-
+  if (branchId!='1') {
+    console.log(data);
+    data=data.filter(d => d.branchId==branchId);
+  }
   if (relationConfig) {
-    let current = 0;
-    let end = relationConfig.length * Object.keys(data).length;
+    let current=0;
+    let end=relationConfig.length*Object.keys(data).length;
     for (rc of relationConfig) {
       for (d of data) {
         $('#datatableProgress > div').css('width', `${current/end*100}%`);
@@ -179,7 +200,7 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
       <'row'<'col-lg-12't>>
       <'row'<'col-lg-5'i><'col-lg-7'p>>
     `,
-    buttons: exportConfig ? exportConfig.buttons : ['colvis'],
+    buttons: exportConfig? exportConfig.buttons:['colvis'],
     data: data,
     columns: columnsConfig,
     initComplete: () => {
@@ -218,6 +239,7 @@ let showData=async (title, table, id, editMode=false) => {
         $('#bbaModalBody').html(await form.generate());
         calculateWastingTime();
         setReceivableAlert();
+        setAdminAllBranch();
       } else {
         showAlert('#bbaModalBody', 'danger', `(${response.status}) ${response.message}`);
       }
@@ -261,6 +283,7 @@ let addData=async (title, table) => {
   $('#bbaModalBody').html(await form.generate());
   calculateWastingTime();
   setReceivableAlert();
+  setAdminAllBranch();
   $('#bbaModalFooter').html(`
     <button id="submitAdd" type="button" class="btn btn-success" style="float: right;" onclick="submitAdd('${table}')">
       Simpan <i class="bx bx-save"></i>

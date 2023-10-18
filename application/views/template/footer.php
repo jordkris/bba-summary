@@ -105,6 +105,7 @@
 <script>
 localStorage.setItem('session', '<?= $profile['session']; ?>');
 localStorage.setItem('roleId', '<?= $this->session->userdata('roleId'); ?>');
+localStorage.setItem('branchId', '<?= $this->session->userdata('branchId'); ?>');
 localStorage.setItem('baseUrl', '<?= base_url(); ?>'.slice(0, -1));
 </script>
 <script src="<?= base_url(); ?>/assets/js/class/inputBox.js"></script>

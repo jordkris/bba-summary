@@ -12,6 +12,7 @@
               <th>Nama</th>
               <th>Username</th>
               <th>Role</th>
+              <th>Cabang</th>
               <th>Created Date</th>
               <th>Updated Date</th>
               <th>Action</th>

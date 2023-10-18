@@ -7,6 +7,7 @@ readData('#shipData', 'shipdata', [
     }
   },
   { data: "shipId" },
+  { data: "voyage" },
   { data: "shipTypeId", visible: false },
   { data: "flagId" },
   { data: "grt", visible: false },
@@ -77,14 +78,14 @@ readData('#shipData', 'shipdata', [
       text: `<i class="bx bxs-cloud-download"></i> Export to CSV`,
       title: 'Data Kapal '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(14)
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(15)
       }
-    },{
+    }, {
       extend: 'excel',
       text: `<i class="bx bxs-cloud-download"></i> Export to Excel`,
       title: 'Data Kapal '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(14)
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(15)
       }
     },
     'colvis'

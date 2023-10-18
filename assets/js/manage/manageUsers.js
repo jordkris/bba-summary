@@ -9,6 +9,7 @@ readData('#users', 'users', [
   { data: "name" },
   { data: "username", visible: false },
   { data: "roleId", visible: false },
+  { data: "branchId", visible: false },
   { data: "createdDate", visible: false },
   { data: "updatedDate", visible: false },
   {
@@ -25,4 +26,8 @@ readData('#users', 'users', [
   table: 'role',
   column: 'name',
   sourceColumn: 'roleId'
+},{
+  table: 'branch',
+  column: 'name',
+  sourceColumn: 'branchId'
 }]);

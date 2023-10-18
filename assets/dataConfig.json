@@ -57,6 +57,17 @@
         }
       },
       {
+        "key": "branchId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Branch",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Cabang",
+          "optionsTable": "branch"
+        }
+      },
+      {
         "key": "createdDate",
         "type": "InputBox",
         "options": {
@@ -289,6 +300,17 @@
         }
       },
       {
+        "key": "voyage",
+        "type": "InputBox",
+        "options": {
+          "label": "Voyage",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Voyage Keberapa"
+        }
+      },
+      {
         "key": "shipTypeId",
         "type": "SelectBox",
         "options": {
@@ -419,7 +441,8 @@
           "isReadOnly": true,
           "help": "Waktu yang diperlukan sejak finish sampai dengan SPB"
         }
-      },{
+      },
+      {
         "key": "wastingTimeNumber",
         "type": "InputBox",
         "options": {
@@ -434,6 +457,7 @@
     "outputConfig": {
       "id": "",
       "shipId": "",
+      "voyage": "",
       "shipTypeId": "",
       "flag": "",
       "grt": "",
@@ -453,6 +477,17 @@
   "shipreceivabledata": {
     "inputConfig": [
       {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id data piutang kapal"
+        }
+      },
+      {
         "key": "shipId",
         "type": "SelectBox",
         "options": {
@@ -464,6 +499,17 @@
         }
       },
       {
+        "key": "voyage",
+        "type": "InputBox",
+        "options": {
+          "label": "Voyage",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Voyage Keberapa",
+          "optionsTable": "voyage"
+        }
+      },
+      {
         "key": "ownerId",
         "type": "SelectBox",
         "options": {
@@ -472,6 +518,17 @@
           "isReadOnly": false,
           "help": "Nama pemilik kapal",
           "optionsTable": "shipowner"
+        }
+      },
+      {
+        "key": "branchId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Cabang",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Cabang",
+          "optionsTable": "branch"
         }
       },
       {
@@ -517,7 +574,8 @@
           "isReadOnly": true,
           "help": "Due date"
         }
-      },{
+      },
+      {
         "key": "firstAlert",
         "type": "InputBox",
         "options": {
@@ -527,7 +585,8 @@
           "isReadOnly": true,
           "help": "Alert pertama"
         }
-      },{
+      },
+      {
         "key": "secondAlert",
         "type": "InputBox",
         "options": {
@@ -537,7 +596,8 @@
           "isReadOnly": true,
           "help": "Alert kedua"
         }
-      },{
+      },
+      {
         "key": "thirdAlert",
         "type": "InputBox",
         "options": {
@@ -552,7 +612,9 @@
     "outputConfig": {
       "id": "",
       "shipId": "",
+      "voyage": "",
       "ownerId": "",
+      "branchId": "",
       "invoiceTime": "",
       "invoiceStatusId": "",
       "invoiceDeliveryTime": "",
