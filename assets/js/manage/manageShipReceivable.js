@@ -11,6 +11,18 @@ readData('#shipReceivable', 'shipreceivabledata', [
   { data: "ownerId" },
   { data: "branchId" },
   { data: "invoiceTime", visible: false },
+  { data: "totalFDA", visible: false },
+  { data: "ops", visible: false },
+  { data: "agencyFee", visible: false },
+  { data: "ppn", visible: false },
+  { data: "others", visible: false },
+  { data: "stamp", visible: false },
+  { data: "pph", visible: false },
+  { data: "dpDate", visible: false },
+  { data: "dp", visible: false },
+  { data: "paymentDate", visible: false },
+  { data: "payment", visible: false },
+  { data: "receivable", visible: false },
   {
     data: "invoiceStatusId",
     render: (data, type, row, meta) => {

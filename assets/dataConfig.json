@@ -543,6 +543,138 @@
         }
       },
       {
+        "key": "totalFDA",
+        "type": "InputBox",
+        "options": {
+          "label": "Total FDA",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Total Freeboard Deck Area"
+        }
+      },
+      {
+        "key": "ops",
+        "type": "InputBox",
+        "options": {
+          "label": "OPS",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "OPS"
+        }
+      },
+      {
+        "key": "agencyFee",
+        "type": "InputBox",
+        "options": {
+          "label": "Agency Fee",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Biaya agensi"
+        }
+      },
+      {
+        "key": "ppn",
+        "type": "InputBox",
+        "options": {
+          "label": "PPN",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "PPN (11% Agency Fee)"
+        }
+      },
+      {
+        "key": "others",
+        "type": "InputBox",
+        "options": {
+          "label": "Lain-lain",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Pajak (11% Agency Fee)"
+        }
+      },
+      {
+        "key": "stamp",
+        "type": "InputBox",
+        "options": {
+          "label": "Materai",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Materai"
+        }
+      },
+      {
+        "key": "pph",
+        "type": "InputBox",
+        "options": {
+          "label": "PPh/Potongan/Diskon",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "PPh/Potongan/Diskon"
+        }
+      },
+      {
+        "key": "dpDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Tanggal DP",
+          "type": "date",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal biaya muka"
+        }
+      },
+      {
+        "key": "dp",
+        "type": "InputBox",
+        "options": {
+          "label": "DP",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Biaya muka"
+        }
+      },
+      {
+        "key": "paymentDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Tanggal Pelunasan",
+          "type": "date",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal pelunasan"
+        }
+      },
+      {
+        "key": "payment",
+        "type": "InputBox",
+        "options": {
+          "label": "Pelunasan",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Pelunasan"
+        }
+      },
+      {
+        "key": "receivable",
+        "type": "InputBox",
+        "options": {
+          "label": "Piutang",
+          "type": "number",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Piutang"
+        }
+      },
+      {
         "key": "invoiceStatusId",
         "type": "SelectBox",
         "options": {
@@ -616,6 +748,18 @@
       "ownerId": "",
       "branchId": "",
       "invoiceTime": "",
+      "totalFDA": "",
+      "ops": "",
+      "agencyFee": "",
+      "ppn": "",
+      "others": "",
+      "stamp": "",
+      "pph": "",
+      "dpDate": "",
+      "dp": "",
+      "paymentDate": "",
+      "payment": "",
+      "receivable": "",
       "invoiceStatusId": "",
       "invoiceDeliveryTime": "",
       "dueDate": "",
