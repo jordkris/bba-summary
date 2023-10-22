@@ -258,8 +258,12 @@ class Api extends CI_Controller
         redirect('admin');
       } else if ($profile['roleId'] == 2) {
         redirect('supervisor');
-      } else {
+      } else if($profile['roleId'] == 3){
         redirect('staff');
+      } else if($profile['roleId'] == 4) {
+        redirect('tug');
+      } else {
+        redirect('pbm');
       }
     } else {
       throw new Exception('Internal server error');

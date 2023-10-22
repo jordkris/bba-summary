@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Supervisor extends CI_Controller
+class Tug extends CI_Controller
 {
   private $webSession;
   public function __construct()
@@ -12,19 +12,18 @@ class Supervisor extends CI_Controller
   }
   public function index()
   {
-    redirect('supervisor/manageShipReceivable');
+   redirect('tug/manageTugData'); 
   }
 
-  public function manageShipReceivable()
-  {
+  public function manageTugData() {
     if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth');
-    $data['title'] = 'Kelola Data Piutang Kapal';
+    $data['title'] = 'Kelola Data Tug';
     $data['profile'] = $this->m_utils->getProfile();
     $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
-    $this->load->view('supervisor/manageShipReceivable');
+    $this->load->view('staff/manageShipData');
     $this->load->view('template/footer');
   }
 }

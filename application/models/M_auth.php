@@ -18,14 +18,21 @@ class M_auth extends CI_Model
 		$this->m_db->updateByCustom('users', ['session' => null], 'username', $username);
 		$this->session->sess_destroy();
 	}
-	public function checkSession($webSession)
+	public function checkSession($webSession, $pathMode = false)
 	{
 		$status = false;
 		if ($webSession) {
-			$dbResponse = $this->m_db->selectByCustom('users', 'session', $webSession);
-			if (!$dbResponse->error['code'] && $dbResponse->output->num_rows() > 0) {
-				$status = true;
-			}
+			$menuPath = $this->uri->segment(1) . '/' . $this->uri->segment(2);
+			$pathCondition = $pathMode ? 'AND m.path = "' . $menuPath . '"' : '';
+			$query = '
+				SELECT u.id FROM users u
+				JOIN accessmenu am ON am.roleId = u.roleId
+				JOIN menu m ON am.menuId = m.id
+				WHERE u.session = "' . $webSession . '"
+				AND am.roleId = ' . $this->session->userdata('roleId') .' '. $pathCondition . '
+			';
+			$count = $this->db->query($query)->num_rows();
+			if ($count > 0) $status = true;
 		}
 		return $status;
 	}

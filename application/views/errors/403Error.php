@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Error - Pages </title>
+    <title>Error - Pages</title>
 
     <meta name="description" content="" />
 
@@ -70,8 +70,8 @@
     <!-- Error -->
     <div class="container-xxl container-p-y">
       <div class="misc-wrapper">
-        <h2 class="mb-2 mx-2">Page Not Found :(</h2>
-        <p class="mb-4 mx-2">Oops! 😖 The requested URL was not found on this server.</p>
+        <h2 class="mb-2 mx-2">Page Forbidden :(</h2>
+        <p class="mb-4 mx-2">Oops! 😖 The requested URL was not allowed.</p>
         <a href="<?= base_url(); ?>" class="btn btn-primary">Back to home</a>
         <div class="mt-3">
           <img
@@ -88,7 +88,7 @@
     <!-- /Error -->
 
     <!-- / Content -->
-
+    
     <!-- Core JS -->
     <!-- build:js /assets/vendor/js/core.js -->
     <script src="<?= base_url(); ?>/assets/vendor/libs/jquery/jquery.js"></script>
