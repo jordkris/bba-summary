@@ -19,9 +19,9 @@
               <th>OPS</th>
               <th>Agency Fee</th>
               <th>PPN</th>
-              <th>Lain-lain</th>
+              <th>Pend. Lain-lain</th>
               <th>Materai</th>
-              <th>PPh/Potongan/Diskon</th>
+              <th>PPh 2%/Diskon</th>
               <th>Tanggal DP</th>
               <th>DP</th>
               <th>Tanggal Pelunasan</th>

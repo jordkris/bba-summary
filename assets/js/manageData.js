@@ -42,6 +42,18 @@ let showAlert=(alertDom, color, message) => {
 `);
 }
 
+let formatCurrency=(number) => {
+  const options={
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 2,
+  };
+  return number.toLocaleString('ID', options);
+}
+
+// remove dots
+let toFloat=(number) => parseFloat(number.replace(/[^0-9]/g, ''));
+
 let modalFunc=() => {
   // calculate wasting time
   $('#issuedTimeSPB,#finishLoad').change((e) => {
@@ -109,18 +121,24 @@ let modalFunc=() => {
 
   // calculate PPN
   $('#agencyFee').change((e) => {
-    let agencyFee=parseInt($('#agencyFee').val());
-    $('#ppn').val(agencyFee*0.11);
+    let agencyFee=toFloat($('#agencyFee').val());
+    $('#ppn').val(formatCurrency(agencyFee*0.11));
   });
 
   // calculate Receivable
   $('#totalFDA,#dp,#payment,#pph').change((e) => {
-    let totalFDA=parseInt($('#totalFDA').val());
-    let dp=parseInt($('#dp').val());
-    let payment=parseInt($('#payment').val());
-    let pph=parseInt($('#pph').val());
-    $('#receivable').val(totalFDA-dp-payment-pph);
+    let totalFDA=toFloat($('#totalFDA').val());
+    let dp=toFloat($('#dp').val());
+    let payment=toFloat($('#payment').val());
+    let pph=toFloat($('#pph').val());
+    $('#receivable').val(formatCurrency(totalFDA-dp-payment-pph));
   });
+
+  // pointing 3 digits
+  $('#totalFDA,#ops,#agencyFee,#ppn,#pph,#dp,#payment,#receivable').change((e) => {
+    e.target.value=formatCurrency(toFloat(e.target.value));
+  });
+
 }
 
 let getRelationData=async (id, table, column) => {

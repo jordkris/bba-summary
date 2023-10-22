@@ -337,7 +337,7 @@
         "type": "InputBox",
         "options": {
           "label": "GRT",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
           "help": "Gross Register Tonnage"
@@ -370,7 +370,7 @@
         "type": "InputBox",
         "options": {
           "label": "Jumlah Muatan",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
           "help": "Jumlah muatan"
@@ -550,7 +550,7 @@
           "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "Total Freeboard Deck Area"
+          "help": "Final Invoice"
         }
       },
       {
@@ -561,7 +561,7 @@
           "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "OPS"
+          "help": "Biaya Operasional"
         }
       },
       {
@@ -569,10 +569,10 @@
         "type": "InputBox",
         "options": {
           "label": "Agency Fee",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "Biaya agensi"
+          "help": "Fee Keagenan"
         }
       },
       {
@@ -580,10 +580,10 @@
         "type": "InputBox",
         "options": {
           "label": "PPN",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": true,
-          "help": "PPN (11% Agency Fee)"
+          "help": "PPN (11% Dari Agency Fee)"
         }
       },
       {
@@ -594,7 +594,7 @@
           "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "Pajak (11% Agency Fee)"
+          "help": "Pendapatan Lain-Lain"
         }
       },
       {
@@ -612,11 +612,11 @@
         "key": "pph",
         "type": "InputBox",
         "options": {
-          "label": "PPh/Potongan/Diskon",
-          "type": "number",
+          "label": "PPh 2% / Diskon",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "PPh/Potongan/Diskon"
+          "help": "PPh 2% / Diskon"
         }
       },
       {
@@ -635,10 +635,10 @@
         "type": "InputBox",
         "options": {
           "label": "DP",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "Biaya muka"
+          "help": "Total Uang Muka"
         }
       },
       {
@@ -657,10 +657,10 @@
         "type": "InputBox",
         "options": {
           "label": "Pelunasan",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": false,
-          "help": "Pelunasan"
+          "help": "Total Pelunasan"
         }
       },
       {
@@ -668,7 +668,7 @@
         "type": "InputBox",
         "options": {
           "label": "Piutang",
-          "type": "number",
+          "type": "text",
           "isEnabled": true,
           "isReadOnly": true,
           "help": "Piutang"
