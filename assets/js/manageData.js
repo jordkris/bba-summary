@@ -54,6 +54,38 @@ let formatCurrency=(number) => {
 // remove dots
 let toFloat=(number) => parseFloat(number.replace(/[^0-9]/g, ''));
 
+let calculateDiff=(duration) => {
+  let years=Math.floor(duration.asYears());
+  duration.subtract(moment.duration(years, 'years'));
+  let months=Math.floor(duration.asMonths());
+  duration.subtract(moment.duration(months, 'months'));
+  let weeks=Math.floor(duration.asWeeks());
+  duration.subtract(moment.duration(weeks, 'weeks'));
+  let days=Math.floor(duration.asDays());
+  duration.subtract(moment.duration(days, 'days'));
+  let hours=Math.floor(duration.asHours());
+  duration.subtract(moment.duration(hours, 'hours'));
+  let minutes=Math.floor(duration.asMinutes());
+  duration.subtract(moment.duration(minutes, 'minutes'));
+  let seconds=Math.floor(duration.asSeconds());
+  let intervalTime='';
+  if (years!=0) {
+    intervalTime=`${years} tahun${months==0? '':' '+months+' bulan'}`;
+  } else if (months!=0) {
+    intervalTime=`${months} bulan${weeks==0? '':' '+weeks+' minggu'}`;
+  } else if (weeks!=0) {
+    intervalTime=`${weeks} minggu${days==0? '':' '+days+' hari'}`;
+  } else if (days!=0) {
+    intervalTime=`${days} hari${hours==0? '':' '+hours+' jam'}`;
+  } else if (hours!=0) {
+    intervalTime=`${hours} jam${minutes==0? '':' '+minutes+' menit'}`;
+  } else if (minutes!=0) {
+    intervalTime=`${minutes} menit${seconds==0? '':' '+seconds+' detik'}`;
+  } else {
+    intervalTime=`${seconds} detik`;
+  }
+  return intervalTime;
+}
 let modalFunc=() => {
   // calculate wasting time
   $('#issuedTimeSPB,#finishLoad').change((e) => {
@@ -62,36 +94,17 @@ let modalFunc=() => {
     let duration=moment.duration(endTime.diff(startTime));
     let durationAsMinutes=duration.asMinutes();
     $('#wastingTimeNumber').val(durationAsMinutes);
-    let years=Math.floor(duration.asYears());
-    duration.subtract(moment.duration(years, 'years'));
-    let months=Math.floor(duration.asMonths());
-    duration.subtract(moment.duration(months, 'months'));
-    let weeks=Math.floor(duration.asWeeks());
-    duration.subtract(moment.duration(weeks, 'weeks'));
-    let days=Math.floor(duration.asDays());
-    duration.subtract(moment.duration(days, 'days'));
-    let hours=Math.floor(duration.asHours());
-    duration.subtract(moment.duration(hours, 'hours'));
-    let minutes=Math.floor(duration.asMinutes());
-    duration.subtract(moment.duration(minutes, 'minutes'));
-    let seconds=Math.floor(duration.asSeconds());
-    let intervalTime='';
-    if (years!=0) {
-      intervalTime=`${years} tahun${months==0? '':' '+months+' bulan'}`;
-    } else if (months!=0) {
-      intervalTime=`${months} bulan${weeks==0? '':' '+weeks+' minggu'}`;
-    } else if (weeks!=0) {
-      intervalTime=`${weeks} minggu${days==0? '':' '+days+' hari'}`;
-    } else if (days!=0) {
-      intervalTime=`${days} hari${hours==0? '':' '+hours+' jam'}`;
-    } else if (hours!=0) {
-      intervalTime=`${hours} jam${minutes==0? '':' '+minutes+' menit'}`;
-    } else if (minutes!=0) {
-      intervalTime=`${minutes} menit${seconds==0? '':' '+seconds+' detik'}`;
-    } else {
-      intervalTime=`${seconds} detik`;
-    }
-    $('#wastingTime').val(intervalTime);
+    $('#wastingTime').val(calculateDiff(duration));
+  });
+
+  // calculate assist duration
+  $('#connectTime,#disconnectTime').change((e) => {
+    let startTime=moment($('#connectTime').val());
+    let endTime=moment($('#disconnectTime').val());
+    let duration=moment.duration(endTime.diff(startTime));
+    let durationAsMinutes=duration.asMinutes();
+    $('#assistDurationNumber').val(durationAsMinutes);
+    $('#assistDuration').val(calculateDiff(duration));
   });
 
   // set Receivable Alert
@@ -513,3 +526,330 @@ let publishShipData=(id) => {
     },
   });
 }
+
+let activityTimeTemplate=(id='', start='', stop='') => {
+  return `
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="form-floating">
+          <input name="start-${id}" type="datetime-local" class="form-control activityTimeInput" aria-describedby="floatingInputHelp" value="${start? start:moment().format('YYYY-MM-DDTHH:mm')}" />
+          <label>Jam Start${id? '':' <span class="text text-warning newActivityTime"><i class="bx bxs-star"></i> NEW</span>'}</label>
+          <div class="form-text">
+            <i class="bx bx-info-circle"></i> Jam Start Loading/Discharging Kapal
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="form-floating">
+          <input name="stop-${id}" type="datetime-local" class="form-control activityTimeInput" aria-describedby="floatingInputHelp" value="${stop? stop:moment().format('YYYY-MM-DDTHH:mm')}" />
+          <label>Jam Stop${id? '':' <span class="text text-warning newActivityTime"><i class="bx bxs-star"></i> NEW</span>'}</label>
+          <div class="form-text">
+            <i class="bx bx-info-circle"></i> Jam Stop Loading/Discharging Kapal
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <button class="btn btn-sm btn-danger w-100 deleteActivityTime"><i class="bx bx-trash"></i></button>
+      </div>
+      <div class="dropdown-divider" style="border: 1px solid #000000 !important"></div>
+    </div>
+  `;
+}
+
+let calculateActivityTime=() => {
+  let duration=moment.duration(), startTime, stopTime;
+  $('.activityTimeInput').each((i, input) => {
+    if (i%2==0) {
+      startTime=moment(input.value);
+    } else {
+      stopTime=moment(input.value);
+      duration=duration.add(moment.duration(stopTime.diff(startTime)));
+    }
+  });
+  let durationAsMinutes=duration.asMinutes();
+  $('#totalHoursNumber').val(durationAsMinutes);
+  $('#totalHours').val(calculateDiff(duration));
+}
+
+//showActivityTime
+let showActivityTime=async (pbmId) => {
+  $('#activityTimeModalTitle').html('Kelola Jam Kegiatan');
+  $('#activityTimeModal').modal('show');
+  $.ajax({
+    url: baseUrl+'/api/getById/'+pbmId,
+    type: "GET",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'activitytime');
+      request.setRequestHeader("column", 'pbmId');
+    },
+    success: async (response) => {
+      if (response.status==200) {
+        setTimeout(() => {
+          calculateActivityTime();
+        });
+        let form='<form id="formActivityTime">';
+        if (response.output) {
+          response.output.forEach((res) => {
+            form+=activityTimeTemplate(res.id, res.start, res.stop);
+          });
+        } else {
+          form+=activityTimeTemplate();
+        }
+        form+='</form>';
+        $('#activityTimeModalBody').html(form);
+        $('.deleteActivityTime').click((e) => {
+          let rowToDelete=e.target.parentElement.parentElement;
+          if (rowToDelete) {
+            rowToDelete.remove();
+          }
+          calculateActivityTime();
+        });
+        $('.activityTimeInput').change(() => {
+          calculateActivityTime();
+        });
+      } else {
+        showAlert('#activityTimeModalBody', 'danger', `(${response.status}) ${response.message}`);
+      }
+      let oldData=response.output? JSON.stringify(response.output):JSON.stringify([]);
+      localStorage.setItem('oldData', oldData);
+      $('#activityTimeModalFooter').html(`
+        <div class="form-floating w-100">
+          <input id="totalHours" type="text" class="form-control" aria-describedby="floatingInputHelp" readonly />
+          <label>Total Jam Kegiatan</label>
+          <div class="form-text">
+            <i class="bx bx-info-circle"></i> Total jam kegiatan
+          </div>
+        </div>
+        <div class="form-floating w-100">
+          <input id="totalHoursNumber" type="text" class="form-control" aria-describedby="floatingInputHelp" readonly />
+          <label>Total Jam Kegiatan (Menit)</label>
+          <div class="form-text">
+            <i class="bx bx-info-circle"></i> Total jam kegiatan dalam menit
+          </div>
+        </div>
+        <button id="addActivityTime" type="button" class="btn btn-primary"><i class="bx bx-plus"></i></button>
+        <button id="submitActivityTime" type="button" class="btn btn-success" style="float: right;" onclick="submitActivityTime(${pbmId})">
+          Simpan <i class="bx bx-save"></i>
+        </button>
+      `);
+      $('#addActivityTime').click(() => {
+        $('#formActivityTime').append(activityTimeTemplate());
+        $('.deleteActivityTime').click((e) => {
+          let rowToDelete=e.target.parentElement.parentElement;
+          if (rowToDelete) {
+            rowToDelete.remove();
+          }
+          calculateActivityTime();
+        });
+        calculateActivityTime();
+        $('.activityTimeInput').change(() => {
+          calculateActivityTime();
+        });
+      });
+    }, error: (error) => {
+      console.error(error);
+      showAlert('#activityTimeModalBody', 'danger', error.responseJSON.message);
+    }
+  });
+}
+
+let submitActivityTime=(pbmId) => {
+  new Promise((resolve, reject) => {
+    let htmlButtonCache=$('#submitActivityTime').html();
+    $('#submitActivityTime').html(`
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    `);
+    $('#submitActivityTime').prop('disabled', true);
+    let table='activitytime';
+    try {
+      let newData=$("#formActivityTime").serializeArray();
+      let oldData=JSON.parse(localStorage.getItem('oldData'));
+      console.log(oldData);
+      console.log(newData);
+      // for updating/deleting old to new data
+      let found;
+      oldData.forEach((od) => {
+        found=false;
+        newData.forEach((nd) => {
+          let ndNameSplitted=nd.name.split('-');
+          if (!nd.value) reject({ htmlButtonCache: htmlButtonCache, message: 'Start dan Stop tidak boleh kosong!' });
+          // edit activity time
+          if (od.id==ndNameSplitted[1]) {
+            found=true;
+            let inputData={};
+            inputData[ndNameSplitted[0]=='start'? 'start':'stop']=nd.value;
+            $.ajax({
+              url: baseUrl+"/api/update/"+od.id,
+              type: "POST",
+              data: JSON.stringify(inputData),
+              dataType: "json",
+              contentType: "application/json",
+              beforeSend: (request) => {
+                request.setRequestHeader("session", session);
+                request.setRequestHeader("table", table);
+              },
+              success: (response) => {
+                if (response.status!=200) {
+                  reject({ htmlButtonCache: htmlButtonCache, message: response.message });
+                }
+              },
+              error: (error) => {
+                reject({ htmlButtonCache: htmlButtonCache, message: error });
+              },
+            });
+          }
+        });
+        // delete activity time
+        if (!found) {
+          $.ajax({
+            url: baseUrl+"/api/delete/"+od.id,
+            type: "DELETE",
+            beforeSend: (request) => {
+              request.setRequestHeader("session", session);
+              request.setRequestHeader("table", table);
+            },
+            success: (response) => {
+              if (response.status!=200) {
+                reject({ htmlButtonCache: htmlButtonCache, message: response.message });
+              }
+            },
+            error: (error) => {
+              reject({ htmlButtonCache: htmlButtonCache, message: error });
+            },
+          });
+        }
+      });
+      // for adding new data
+      let temp={};
+      newData.filter(nd => nd.name.split('-')[1]=='').forEach((nd) => {
+        if (nd.name.split('-')[0]=='start') {
+          temp.start=nd.value;
+        } else {
+          temp.stop=nd.value;
+          $.ajax({
+            url: baseUrl+"/api/add",
+            type: "POST",
+            data: JSON.stringify({
+              pbmId: pbmId,
+              start: temp.start,
+              stop: temp.stop
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            beforeSend: (request) => {
+              request.setRequestHeader("session", session);
+              request.setRequestHeader("table", table);
+            },
+            success: (response) => {
+              if (response.status!=200) {
+                reject({ htmlButtonCache: htmlButtonCache, message: response.message });
+              }
+            },
+            error: (error) => {
+              reject({ htmlButtonCache: htmlButtonCache, message: error });;
+            },
+          });
+        }
+      });
+      // update totalHours
+      $.ajax({
+        url: baseUrl+"/api/update/"+pbmId,
+        type: "POST",
+        data: JSON.stringify({
+          totalHours: $("#totalHours").val(),
+          totalHoursNumber: $("#totalHoursNumber").val()
+        }),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: (request) => {
+          request.setRequestHeader("session", session);
+          request.setRequestHeader("table", 'pbmdata');
+        },
+        success: (response) => {
+          if (response.status!=200) {
+            reject({ htmlButtonCache: htmlButtonCache, message: response.message });
+          }
+        },
+        error: (error) => {
+          reject({ htmlButtonCache: htmlButtonCache, message: error });
+        },
+      });
+    } catch (error) {
+      reject({ htmlButtonCache: htmlButtonCache, message: error });
+    }
+    resolve({ htmlButtonCache: htmlButtonCache, message: 'Success' });
+  }).then((response) => {
+    showAlert('#activityTimeModalFooter', 'success', response.message);
+    $('#submitActivityTime').html(response.htmlButtonCache);
+    $('#submitActivityTime').prop('disabled', false);
+    $('.newActivityTime').remove();
+    $('#activityTimeModal').on('hidden.bs.modal', () => {
+      location.reload();
+    });
+  }).catch((response) => {
+    console.error(response.message);
+    showAlert('#activityTimeModalFooter', 'danger', response.message);
+    $('#submitActivityTime').html(response.htmlButtonCache);
+    $('#submitActivityTime').prop('disabled', false);
+  });;
+}
+
+// target
+$.ajax({
+  url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
+  type: "GET",
+  beforeSend: (request) => {
+    request.setRequestHeader("session", session);
+    request.setRequestHeader("table", 'target');
+    request.setRequestHeader("column", 'month');
+  },
+  success: (response) => {
+    if (response.status==200) {
+      for (let key in response.output[0]) {
+        $(`input[name="${key}"]`).val(response.output[0][key]);
+        if (key=='id') {
+          localStorage.setItem('targetId', response.output[0][key]);
+        }
+      }
+    } else {
+      console.error(response.message);
+    }
+  },
+  error: (error) => {
+    console.error(error.responseJSON.message);
+  },
+});
+
+$('#submitTarget').click(() => {
+  let formData=JSON.stringify(
+    serializeToJson($("#monthlyTarget").serializeArray())
+  );
+  console.log
+  $.ajax({
+    url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
+    type: "POST",
+    data: formData,
+    dataType: "json",
+    contentType: "application/json",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'target');
+    },
+    success: (response) => {
+      if (response.status==200) {
+        showAlert('#monthlyTarget', 'success', response.message);
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      } else {
+        showAlert('#monthlyTarget', 'danger', response.message);
+      }
+    },
+    error: (error) => {
+      showAlert('#monthlyTarget', 'danger', error);
+    }
+  });
+});

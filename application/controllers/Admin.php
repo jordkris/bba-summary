@@ -16,7 +16,7 @@ class Admin extends CI_Controller
   }
 
   public function manageUsers() {
-    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth');
+    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth/logout');
     $data['title'] = 'Kelola Users';
     $data['profile'] = $this->m_utils->getProfile();
     $data['menu'] = $this->m_utils->getAccessMenu();
@@ -29,8 +29,8 @@ class Admin extends CI_Controller
 
   public function manageShipName() {
     $data['title'] = 'Kelola Nama Kapal';
-    $data['profile'] = $this->getProfile();
-    $data['menu'] = $this->getAccessMenu();
+    $data['profile'] = $this->m_utils->getProfile();
+    $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
@@ -40,8 +40,8 @@ class Admin extends CI_Controller
 
   public function manageShipType() {
     $data['title'] = 'Kelola Tipe Kapal';
-    $data['profile'] = $this->getProfile();
-    $data['menu'] = $this->getAccessMenu();
+    $data['profile'] = $this->m_utils->getProfile();
+    $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
@@ -50,8 +50,8 @@ class Admin extends CI_Controller
   }
   public function manageShipOwner() {
     $data['title'] = 'Kelola Pemilik Kapal';
-    $data['profile'] = $this->getProfile();
-    $data['menu'] = $this->getAccessMenu();
+    $data['profile'] = $this->m_utils->getProfile();
+    $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
@@ -60,8 +60,8 @@ class Admin extends CI_Controller
   }
   public function manageBranch() {
     $data['title'] = 'Kelola Cabang';
-    $data['profile'] = $this->getProfile();
-    $data['menu'] = $this->getAccessMenu();
+    $data['profile'] = $this->m_utils->getProfile();
+    $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');
@@ -71,8 +71,8 @@ class Admin extends CI_Controller
 
   public function manageActivity() {
     $data['title'] = 'Kelola Kegiatan';
-    $data['profile'] = $this->getProfile();
-    $data['menu'] = $this->getAccessMenu();
+    $data['profile'] = $this->m_utils->getProfile();
+    $data['menu'] = $this->m_utils->getAccessMenu();
     $this->load->view('template/header', $data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');

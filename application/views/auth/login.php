@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>BBA Summary | <?= $title; ?></title>
+    <title>BOSOWA BANDAR | <?= $title; ?></title>
 
     <meta name="description" content="" />
 
@@ -84,7 +84,6 @@
                 </a>
               </div>
               <!-- /Logo -->
-              <!--<h4 class="mb-2">BBA Summary</h4>-->
               <p class="mb-4">Please login to continue</p>
 
               <form id="formAuthentication" class="mb-3">

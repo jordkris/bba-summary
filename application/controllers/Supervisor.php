@@ -17,7 +17,7 @@ class Supervisor extends CI_Controller
 
   public function manageShipReceivable()
   {
-    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth');
+    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth/logout');
     $data['title'] = 'Kelola Data Piutang Kapal';
     $data['profile'] = $this->m_utils->getProfile();
     $data['menu'] = $this->m_utils->getAccessMenu();

@@ -8,19 +8,9 @@ class Home extends CI_Controller
     parent::__construct();
     // $this->load->model(['m_db']);
   }
-
-  private function getTodayShips()
-  {
-    $query = "
-      SELECT id
-      FROM shipdata 
-      WHERE DATE(issuedTimeSPB) = CURDATE()
-    ";
-    return $this->db->query($query)->num_rows();
-  }
   public function index()
   {
-    $data['todayShips'] = $this->getTodayShips();
+    $data = [];
     $this->load->view('main/homepage', $data);
   }
 }

@@ -767,5 +767,268 @@
       "secondAlert": "",
       "thirdAlert": ""
     }
+  },
+  "tugdata": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id data tug"
+        }
+      },
+      {
+        "key": "shipId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Nama Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kapal",
+          "optionsTable": "shipname"
+        }
+      },
+      {
+        "key": "voyage",
+        "type": "InputBox",
+        "options": {
+          "label": "Voyage",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Voyage Keberapa"
+        }
+      },
+      {
+        "key": "shipTypeId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Tipe Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tipe kapal",
+          "optionsTable": "shiptype"
+        }
+      },
+      {
+        "key": "grt",
+        "type": "InputBox",
+        "options": {
+          "label": "GRT",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Gross Register Tonnage"
+        }
+      },
+      {
+        "key": "activityId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Kegiatan",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Kegiatan",
+          "optionsTable": "activity"
+        }
+      },
+      {
+        "key": "branchId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Cabang",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Cabang",
+          "optionsTable": "branch"
+        }
+      },
+      {
+        "key": "connectTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Jam Connect Kapal",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu connect Kapal"
+        }
+      },
+      {
+        "key": "disconnectTime",
+        "type": "InputBox",
+        "options": {
+          "label": "Jam Disconnect Kapal",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tanggal dan waktu disconnect Kapal"
+        }
+      },
+      {
+        "key": "assistDuration",
+        "type": "InputBox",
+        "options": {
+          "label": "Lama Assist",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Waktu yang diperlukan sejak connect sampai dengan disconnect"
+        }
+      },
+      {
+        "key": "assistDurationNumber",
+        "type": "InputBox",
+        "options": {
+          "label": "Lama Assist (menit)",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Lama assist dalam menit"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "shipId": "",
+      "voyage": "",
+      "shipTypeId": "",
+      "grt": "",
+      "activityId": "",
+      "branchId": "",
+      "connectTime": "",
+      "disconnectTime": "",
+      "assistDuration": "",
+      "assistDurationNumber": ""
+    }
+  },
+  "pbmdata": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id data PBM"
+        }
+      },
+      {
+        "key": "shipId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Nama Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kapal",
+          "optionsTable": "shipname"
+        }
+      },
+      {
+        "key": "voyage",
+        "type": "InputBox",
+        "options": {
+          "label": "Voyage",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Voyage Keberapa"
+        }
+      },
+      {
+        "key": "shipTypeId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Tipe Kapal",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Tipe kapal",
+          "optionsTable": "shiptype"
+        }
+      },
+      {
+        "key": "grt",
+        "type": "InputBox",
+        "options": {
+          "label": "GRT",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Gross Register Tonnage"
+        }
+      },
+      {
+        "key": "activityId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Kegiatan",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Kegiatan",
+          "optionsTable": "activity"
+        }
+      },
+      {
+        "key": "cargoQuantity",
+        "type": "InputBox",
+        "options": {
+          "label": "Jumlah Muatan",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Jumlah muatan"
+        }
+      },
+      {
+        "key": "branchId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Cabang",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Cabang",
+          "optionsTable": "branch"
+        }
+      },
+      {
+        "key": "totalHours",
+        "type": "InputBox",
+        "options": {
+          "label": "Total Jam Kegiatan",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Total jam kegiatan"
+        }
+      }, {
+        "key": "totalHoursNumber",
+        "type": "InputBox",
+        "options": {
+          "label": "Total Kegiatan (menit)",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Total lama kegiatan dalam menit"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "shipId": "",
+      "voyage": "",
+      "shipTypeId": "",
+      "grt": "",
+      "activityId": "",
+      "cargoQuantity": "",
+      "branchId": "",
+      "totalHours": "",
+      "totalHoursNumber": ""
+    }
   }
 }

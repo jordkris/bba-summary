@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>BBA Summary | Homepage</title>
+  <title>BOSOWA BANDAR | Homepage</title>
 
   <meta name="description" content="" />
 
@@ -53,12 +53,12 @@
       <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
         <div class="app-brand demo">
           <a href="#" class="app-brand-link">
-			<div class="row">
-			  <div class="col-lg-12">
-			    <img class="w-100" src="<?= base_url('assets');?>/img/icons/brands/LOGO-BSW-STANDART.png" alt="logo" />
-			  </div>
-			</div>
-		  </a>
+            <div class="row">
+              <div class="col-lg-12">
+                <img class="w-100" src="<?= base_url('assets'); ?>/img/icons/brands/LOGO-BSW-STANDART.png" alt="logo" />
+              </div>
+            </div>
+          </a>
 
           <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -119,69 +119,6 @@
           <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row">
               <div class="col-lg-8 mb-4 order-0">
-                <div class="card">
-                  <div class="d-flex align-items-end row">
-                    <div class="col-sm-7">
-                      <div class="card-body">
-                        <h5 class="card-title text-primary">WELCOME BOSOWA BANDAR DASHBOARD</h5>
-                        <p class="mb-4">
-                          WE HAVE DONE <span class="fw-bold"><?= $todayShips; ?></span> MORE SHIPS TODAY. <br />
-                          CHECK OUR DASHBOARD NOW
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-sm-5 text-center text-sm-left">
-                      <div class="card-body pb-0 px-0 px-md-4">
-                        <img src="<?= base_url(); ?>/assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card mt-4">
-                  <div class="row row-bordered g-0">
-                    <div class="col-md-8">
-                      <h5 class="card-header m-0 me-2 pb-3">Total SHIPS IN <?= date('Y'); ?></h5>
-                      <div id="montlyGraph" class="px-2"></div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card-body">
-                        <!-- <div class="text-center">
-                          <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              2022
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                              <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                              <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                              <a class="dropdown-item" href="javascript:void(0);">2019</a>
-                            </div>
-                          </div>
-                        </div> -->
-                      </div>
-                      <div id="growthChart"></div>
-                      <div class="text-center fw-semibold pt-3 mb-2"><span id="monthlyGrowth"></span>% SHIPS GROWTH LAST MONTH</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4 order-1">
-                <div class="card h-100">
-                  <div class="card-header d-flex align-items-center justify-content-between pb-0">
-                    <div class="card-title mb-0">
-                      <h5 class="m-0 me-2">BRANCH STATISTICS (<span id="todayDate"></span>)</h5>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                      <div class="d-flex flex-column align-items-center gap-1">
-                        <h2 class="mb-2" id="totalShipBranch"></h2>
-                        <span>TOTAL SHIPS ALL BRANCH</span>
-                      </div>
-                      <div id="shipBranchDaily"></div>
-                    </div>
-                    <ul class="p-0 m-0" id="allBranch"></ul>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

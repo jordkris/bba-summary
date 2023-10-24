@@ -57,14 +57,27 @@
       </div>
       <div class="modal-footer" id="passwordModalFooter">
         <button class="btn btn-primary" data-bs-target="#bbaModal" data-bs-toggle="modal" data-bs-dismiss="modal">
-        <i class="bx bx-caret-left-circle"></i> Back 
+          <i class="bx bx-caret-left-circle"></i> Back
         </button>
       </div>
     </div>
   </div>
 </div>
-   <!-- Helpers -->
-   <script src="<?= base_url(); ?>/assets/vendor/js/helpers.js"></script>
+
+<div class="modal fade" id="activityTimeModal" aria-hidden="true" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="activityTimeModalTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="activityTimeModalBody"></div>
+      <div class="modal-footer" id="activityTimeModalFooter"></div>
+    </div>
+  </div>
+</div>
+<!-- Helpers -->
+<script src="<?= base_url(); ?>/assets/vendor/js/helpers.js"></script>
 
 <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -103,10 +116,10 @@
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script>
-localStorage.setItem('session', '<?= $profile['session']; ?>');
-localStorage.setItem('roleId', '<?= $this->session->userdata('roleId'); ?>');
-localStorage.setItem('branchId', '<?= $this->session->userdata('branchId'); ?>');
-localStorage.setItem('baseUrl', '<?= base_url(); ?>'.slice(0, -1));
+  localStorage.setItem('session', '<?= $profile['session']; ?>');
+  localStorage.setItem('roleId', '<?= $this->session->userdata('roleId'); ?>');
+  localStorage.setItem('branchId', '<?= $this->session->userdata('branchId'); ?>');
+  localStorage.setItem('baseUrl', '<?= base_url(); ?>'.slice(0, -1));
 </script>
 <script src="<?= base_url(); ?>/assets/js/class/inputBox.js"></script>
 <script src="<?= base_url(); ?>/assets/js/class/selectBox.js"></script>

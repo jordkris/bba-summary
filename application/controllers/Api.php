@@ -11,6 +11,7 @@ class Api extends CI_Controller
     $this->load->model(['m_auth', 'm_db']);
     $header = $this->input->request_headers();
     $this->table = isset($header['table']) ? $header['table'] : null;
+    $this->column = isset($header['column']) ? $header['column'] : null;
     $this->webSession = isset($header['session']) ? $header['session'] : null;
   }
 
@@ -63,10 +64,15 @@ class Api extends CI_Controller
           $response->status = 401;
           throw new Exception('Unauthorized');
         }
-        $dbResponse = $this->m_db->selectById($this->table, $id);
+        $dbResponse = null;
+        if ($this->column) {
+          $dbResponse = $this->m_db->selectByCustom($this->table, $this->column, $id);
+        } else {
+          $dbResponse = $this->m_db->selectById($this->table, $id);
+        }
         if (!$dbResponse->error['code']) {
           if ($dbResponse->output->num_rows() > 0) {
-            $response->output = $dbResponse->output->row_array();
+            $response->output = $this->column ? $dbResponse->output->result_array() : $dbResponse->output->row_array();
             $response->status = 200;
             $response->message = 'Success';
           } else {
@@ -258,9 +264,9 @@ class Api extends CI_Controller
         redirect('admin');
       } else if ($profile['roleId'] == 2) {
         redirect('supervisor');
-      } else if($profile['roleId'] == 3){
+      } else if ($profile['roleId'] == 3) {
         redirect('staff');
-      } else if($profile['roleId'] == 4) {
+      } else if ($profile['roleId'] == 4) {
         redirect('tug');
       } else {
         redirect('pbm');

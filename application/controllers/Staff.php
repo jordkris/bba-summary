@@ -7,10 +7,9 @@ class Staff extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-    $this->load->model(['m_auth', 'm_db','m_utils']);
+    $this->load->model(['m_auth', 'm_utils']);
     $this->webSession = $this->session->userdata('session');
   }
-
   public function index()
   {
     redirect('staff/manageShipData');
@@ -18,7 +17,7 @@ class Staff extends CI_Controller
 
   public function manageShipData()
   {
-    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth');
+    if (!$this->m_auth->checkSession($this->webSession, true)) redirect('auth/logout');
     $data['title'] = 'Kelola Data Kapal';
     $data['profile'] = $this->m_utils->getProfile();
     $data['menu'] = $this->m_utils->getAccessMenu();

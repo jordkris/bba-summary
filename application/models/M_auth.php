@@ -24,12 +24,13 @@ class M_auth extends CI_Model
 		if ($webSession) {
 			$menuPath = $this->uri->segment(1) . '/' . $this->uri->segment(2);
 			$pathCondition = $pathMode ? 'AND m.path = "' . $menuPath . '"' : '';
+			$roleCondition = $pathMode ? 'AND am.roleId = ' . $this->session->userdata('roleId') : '';
 			$query = '
 				SELECT u.id FROM users u
 				JOIN accessmenu am ON am.roleId = u.roleId
 				JOIN menu m ON am.menuId = m.id
 				WHERE u.session = "' . $webSession . '"
-				AND am.roleId = ' . $this->session->userdata('roleId') .' '. $pathCondition . '
+				' . $roleCondition . ' ' . $pathCondition . '
 			';
 			$count = $this->db->query($query)->num_rows();
 			if ($count > 0) $status = true;
