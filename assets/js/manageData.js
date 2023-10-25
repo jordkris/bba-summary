@@ -46,7 +46,7 @@ let formatCurrency=(number) => {
   const options={
     style: 'currency',
     currency: 'IDR',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0
   };
   return number.toLocaleString('ID', options);
 }
@@ -133,22 +133,23 @@ let modalFunc=() => {
   });
 
   // calculate PPN
-  $('#agencyFee').change((e) => {
+  $('#agencyFee').keyup((e) => {
     let agencyFee=toFloat($('#agencyFee').val());
     $('#ppn').val(formatCurrency(agencyFee*0.11));
   });
 
   // calculate Receivable
-  $('#totalFDA,#dp,#payment,#pph').change((e) => {
+  $('#totalFDA,#dp,#payment,#pph').keyup((e) => {
     let totalFDA=toFloat($('#totalFDA').val());
     let dp=toFloat($('#dp').val());
     let payment=toFloat($('#payment').val());
     let pph=toFloat($('#pph').val());
+    console.log(totalFDA,dp,payment,pph);
     $('#receivable').val(formatCurrency(totalFDA-dp-payment-pph));
   });
 
   // pointing 3 digits
-  $('#totalFDA,#ops,#agencyFee,#ppn,#pph,#dp,#payment,#receivable').change((e) => {
+  $('#totalFDA,#ops,#agencyFee,#ppn,#pph,#dp,#payment,#receivable').keyup((e) => {
     e.target.value=formatCurrency(toFloat(e.target.value));
   });
 

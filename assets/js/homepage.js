@@ -44,144 +44,107 @@ let calculateDiff=(duration) => {
   return intervalTime;
 }
 
-$.ajax({
-  url: baseUrl+'/api/getById/'+moment().format('YYYY-MM')+'-00',
-  type: "GET",
-  beforeSend: (request) => {
-    request.setRequestHeader("table", 'target');
-    request.setRequestHeader("column", 'month');
-  },
-  success: (response) => {
-    if (response.status==200) {
-      [['totalShips', 'shipdata'],
-      ['wastingTime', 'shipdata'],
-      ['totalTonage', 'pbmdata'],
-      ['loadingRate', 'pbmdata'],
-      ['totalShipsAssist', 'tugdata'],
-      ['totalAssistTime', 'tugdata']].forEach((key) => {
-        $.ajax({
-          url: baseUrl+'/api/getAll',
-          type: "GET",
-          beforeSend: (request) => {
-            request.setRequestHeader("table", key[1]);
-          },
-          success: (res) => {
-            if (res.status==200) {
-              if (!res.output) res.output=[];
-              let data, currentSingleData, percentData;
-              switch (key[0]) {
-                case 'totalShips':
-                  data=res.output.filter((d) => d.issuedTimeSPB.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.length;
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  }
-                  break;
-                case 'wastingTime':
-                  data=res.output.filter((d) => d.issuedTimeSPB.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.reduce((a, b) => a+b.wastingTimeNumber, 0)/60;
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  }
-                  break;
-                case 'totalTonage':
-                  data=res.output.filter((d) => d.createdDate.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.reduce((a, b) => a+b.cargoQuantity, 0);
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  }
-                  break;
-                case 'loadingRate':
-                  data=res.output.filter((d) => d.createdDate.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.reduce((a, b) => a+b.totalHoursNumber, 0)/60;
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  }
-                  break;
-                case 'totalShipsAssist':
-                  data=res.output.filter((d) => d.connectTime.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.length;
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  }
-                  break;
-                case 'totalAssistTime':
-                  data=res.output.filter((d) => d.connectTime.slice(0, 7)==moment().format('YYYY-MM'));
-                  currentSingleData=data.reduce((a, b) => a+b.assistDurationNumber, 0)/60;
-                  percentData=round(currentSingleData/response.output[0][key[0]]*100);
-                  if (percentData>0&&percentData<33) {
-                    $(`#${key[0]} > div`).addClass('bg-success');
-                  } else if (percentData>=33&&percentData<66) {
-                    $(`#${key[0]} > div`).addClass('bg-warning');
-                  } else {
-                    $(`#${key[0]} > div`).addClass('bg-danger');
-                  }
-                  break;
-                default:
-                  break;
-              }
-              $(`#${key[0]} > div`).css('width', percentData+'%');
-              $(`#${key[0]}Percent`).html(percentData+'%');
-            } else {
-              console.error(res.message);
-            }
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      });
-    } else {
-      console.error(res.message);
-    }
-  },
-  error: (error) => {
-    console.error(error);
-  },
-});
-
 $('#homeModal').on('hidden.bs.modal', function () {
   $('#homeModalTitle').empty();
   $('#homeModalBody').empty();
   $('#homeModalFooter').empty();
 });
 
-['totalShips',
-  'wastingTime',
-  'totalTonage',
-  'loadingRate',
-  'totalShipsAssist',
-  'totalAssistTime'].forEach((feature) => {
+(async () => {
+  let targets=await new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+'/api/getById/'+moment().format('YYYY-MM')+'-00',
+      type: "GET",
+      beforeSend: (request) => {
+        request.setRequestHeader("table", 'target');
+        request.setRequestHeader("column", 'month');
+      },
+      success: (response) => {
+        if (response.status==200) {
+          resolve(response.output[0]);
+        } else {
+          reject(res.message);
+        }
+      },
+      error: (error) => {
+        reject(error);
+      },
+    });
+  });
+  ['totalShips', 'wastingTime', 'totalTonage', 'loadingRate', 'totalShipsAssist', 'totalAssistTime'].forEach((feature) => {
     $.ajax({
       url: baseUrl+'/api/homepage/'+feature,
       type: "GET",
       success: (res) => {
         if (res.status==200) {
+          let currentSingleData, percentData;
+          currentSingleData=res.output.reduce((a, b) => a+parseInt(b.count), 0);
+          switch (feature) {
+            case 'totalShips':
+              percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-danger');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-success');
+              }
+              break;
+            case 'wastingTime':
+              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-success');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-danger');
+              }
+              break;
+            case 'totalTonage':
+              percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-danger');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-success');
+              }
+              break;
+            case 'loadingRate':
+              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-success');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-danger');
+              }
+              break;
+            case 'totalShipsAssist':
+              percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-danger');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-success');
+              }
+              break;
+            case 'totalAssistTime':
+              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              if (percentData>0&&percentData<33) {
+                $(`#${feature} > div`).addClass('bg-success');
+              } else if (percentData>=33&&percentData<66) {
+                $(`#${feature} > div`).addClass('bg-warning');
+              } else {
+                $(`#${feature} > div`).addClass('bg-danger');
+              }
+              break;
+            default:
+              break;
+          }
+          $(`#${feature} > div`).css('width', percentData+'%');
+          $(`#${feature}Percent`).html(percentData+'%');
           $(`#${feature}Detail`).click(() => {
             $('#homeModal').modal('show');
             let content='';
@@ -305,7 +268,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
             $('#homeModalBody').html(content);
           });
         } else {
-          showAlert('#bbaModalBody', 'danger', `(${response.status}) ${response.message}`);
+          showAlert('#bbaModalBody', 'danger', `(${res.status}) ${res.message}`);
         }
       },
       error: (error) => {
@@ -313,3 +276,4 @@ $('#homeModal').on('hidden.bs.modal', function () {
       }
     });
   });
+})();

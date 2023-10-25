@@ -108,6 +108,7 @@ class M_db extends CI_Model
         $response->output = $this->db->query("
           SELECT b.name, COUNT(sd.id) AS count FROM shipdata sd
           JOIN branch b ON b.id = sd.branchId
+          WHERE MONTH(sd.issuedTimeSPB) = MONTH(CURRENT_DATE()) AND YEAR(sd.issuedTimeSPB) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count DESC
         ");
@@ -116,6 +117,7 @@ class M_db extends CI_Model
         $response->output = $this->db->query("
           SELECT b.name, SUM(sd.wastingTimeNumber) AS count FROM shipdata sd
           JOIN branch b ON b.id = sd.branchId
+          WHERE MONTH(sd.issuedTimeSPB) = MONTH(CURRENT_DATE()) AND YEAR(sd.issuedTimeSPB) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count ASC
         ");
@@ -124,6 +126,7 @@ class M_db extends CI_Model
         $response->output = $this->db->query("
           SELECT b.name, SUM(pd.cargoQuantity) AS count FROM pbmdata pd
           JOIN branch b ON b.id = pd.branchId
+          WHERE MONTH(pd.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(pd.createdDate) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count DESC;
         ");
@@ -132,14 +135,16 @@ class M_db extends CI_Model
         $response->output = $this->db->query("
           SELECT b.name, SUM(pd.totalHoursNumber) AS count FROM pbmdata pd
           JOIN branch b ON b.id = pd.branchId
+          WHERE MONTH(pd.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(pd.createdDate) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count ASC;
-        ");
+          ");
         break;
       case 'totalShipsAssist':
         $response->output = $this->db->query("
           SELECT b.name, COUNT(td.id) AS count FROM tugdata td
           JOIN branch b ON b.id = td.branchId
+          WHERE MONTH(td.connectTime) = MONTH(CURRENT_DATE()) AND YEAR(td.connectTime) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count DESC;
         ");
@@ -148,6 +153,7 @@ class M_db extends CI_Model
         $response->output = $this->db->query("
           SELECT b.name, SUM(td.assistDurationNumber) AS count FROM tugdata td
           JOIN branch b ON b.id = td.branchId
+          WHERE MONTH(td.connectTime) = MONTH(CURRENT_DATE()) AND YEAR(td.connectTime) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
           ORDER BY count ASC;
         ");

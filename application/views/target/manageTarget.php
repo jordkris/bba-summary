@@ -17,7 +17,7 @@
           <div class="col-lg-6">
             <div class="form-floating">
               <input name="wastingTime" type="number" class="form-control" aria-describedby="floatingInputHelp" />
-              <label>Wasting Time</label>
+              <label>Wasting Time (jam)</label>
               <div class="form-text">
                 <i class="bx bx-info-circle"></i> Target wasting time (jam)
               </div>
@@ -26,16 +26,16 @@
           <div class="col-lg-6">
             <div class="form-floating">
               <input name="totalTonage" type="number" class="form-control" aria-describedby="floatingInputHelp" />
-              <label>Total Tonnage</label>
+              <label>Total Tonnage (Ton)</label>
               <div class="form-text">
-                <i class="bx bx-info-circle"></i> Target jumlah muatan kapal (kg)
+                <i class="bx bx-info-circle"></i> Target jumlah muatan kapal (ton)
               </div>
             </div>
           </div>
           <div class="col-lg-6">
             <div class="form-floating">
               <input name="loadingRate" type="number" class="form-control" aria-describedby="floatingInputHelp" />
-              <label>Loading / Discharging Rate</label>
+              <label>Loading / Discharging Rate (jam)</label>
               <div class="form-text">
                 <i class="bx bx-info-circle"></i> Target lama kegiatan (jam)
               </div>
@@ -53,7 +53,7 @@
           <div class="col-lg-6">
             <div class="form-floating">
               <input name="totalAssistTime" type="number" class="form-control" aria-describedby="floatingInputHelp" />
-              <label>Total Assist Time</label>
+              <label>Total Assist Time (jam)</label>
               <div class="form-text">
                 <i class="bx bx-info-circle"></i> Target lama assit (jam)
               </div>

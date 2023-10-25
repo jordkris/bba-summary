@@ -11,7 +11,7 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/assets/img/favicon/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/assets/img/favicon/favicon.png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -168,7 +168,7 @@
                         <a href="javascript:void(0);" class="text text-primary" id="totalTonageDetail">Click for detail</a>
                       </div>
                       <div class="col-lg-9">
-                        <div>Wasting Time</div>
+                        <div>Loading / Discharging Rate</div>
                         <div id="loadingRate" class="progress">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
@@ -200,7 +200,7 @@
                         <a href="javascript:void(0);" class="text text-primary" id="totalShipsAssistDetail">Click for detail</a>
                       </div>
                       <div class="col-lg-9">
-                        <div>Wasting Time</div>
+                        <div>Total Assist Time</div>
                         <div id="totalAssistTime" class="progress">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
