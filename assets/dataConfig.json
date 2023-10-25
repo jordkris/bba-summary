@@ -1006,7 +1006,8 @@
           "isReadOnly": false,
           "help": "Total jam kegiatan"
         }
-      }, {
+      },
+      {
         "key": "totalHoursNumber",
         "type": "InputBox",
         "options": {
@@ -1015,6 +1016,17 @@
           "isEnabled": true,
           "isReadOnly": true,
           "help": "Total lama kegiatan dalam menit"
+        }
+      },
+      {
+        "key": "createdDate",
+        "type": "InputBox",
+        "options": {
+          "label": "Tanggal data dibuat",
+          "type": "datetime-local",
+          "isEnabled": true,
+          "isReadOnly": true,
+          "help": "Tanggal data dibuat"
         }
       }
     ],
@@ -1028,7 +1040,8 @@
       "cargoQuantity": "",
       "branchId": "",
       "totalHours": "",
-      "totalHoursNumber": ""
+      "totalHoursNumber": "",
+      "createdDate": ""
     }
   }
 }

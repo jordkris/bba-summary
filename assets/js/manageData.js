@@ -584,11 +584,11 @@ let showActivityTime=async (pbmId) => {
       request.setRequestHeader("column", 'pbmId');
     },
     success: async (response) => {
+      let form='<form id="formActivityTime">';
       if (response.status==200) {
         setTimeout(() => {
           calculateActivityTime();
         });
-        let form='<form id="formActivityTime">';
         if (response.output) {
           response.output.forEach((res) => {
             form+=activityTimeTemplate(res.id, res.start, res.stop);
@@ -596,21 +596,23 @@ let showActivityTime=async (pbmId) => {
         } else {
           form+=activityTimeTemplate();
         }
-        form+='</form>';
-        $('#activityTimeModalBody').html(form);
-        $('.deleteActivityTime').click((e) => {
-          let rowToDelete=e.target.parentElement.parentElement;
-          if (rowToDelete) {
-            rowToDelete.remove();
-          }
-          calculateActivityTime();
-        });
-        $('.activityTimeInput').change(() => {
-          calculateActivityTime();
-        });
       } else {
-        showAlert('#activityTimeModalBody', 'danger', `(${response.status}) ${response.message}`);
+        showAlert('#activityTimeModalBody', 'warning', `(${response.status}) ${response.message}`);
+        form+=activityTimeTemplate();
       }
+      form+='</form>';
+      $('#activityTimeModalBody').html(form);
+      $('.deleteActivityTime').click((e) => {
+        let rowToDelete=e.target.parentElement.parentElement;
+        if (rowToDelete) {
+          rowToDelete.remove();
+        }
+        calculateActivityTime();
+      });
+      $('.activityTimeInput').change(() => {
+        calculateActivityTime();
+      });
+
       let oldData=response.output? JSON.stringify(response.output):JSON.stringify([]);
       localStorage.setItem('oldData', oldData);
       $('#activityTimeModalFooter').html(`

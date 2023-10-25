@@ -118,7 +118,101 @@
 
           <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row">
-              <div class="col-lg-8 mb-4 order-0">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Performance of Agency</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-9">
+                        <div>Number of Ships</div>
+                        <div id="totalShips" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="totalShipsPercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="totalShipsDetail">Click for detail</a>
+                      </div>
+                      <div class="col-lg-9">
+                        <div>Wasting Time</div>
+                        <div id="wastingTime" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="wastingTimePercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="wastingTimeDetail">Click for detail</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+              </div>
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Performance of PBM</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-9">
+                        <div>Total Tonnage</div>
+                        <div id="totalTonage" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="totalTonagePercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="totalTonageDetail">Click for detail</a>
+                      </div>
+                      <div class="col-lg-9">
+                        <div>Wasting Time</div>
+                        <div id="loadingRate" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="loadingRatePercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="loadingRateDetail">Click for detail</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+              </div>
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Performance of TUG Support</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-9">
+                        <div>Number of Ship's Assist</div>
+                        <div id="totalShipsAssist" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="totalShipsAssistPercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="totalShipsAssistDetail">Click for detail</a>
+                      </div>
+                      <div class="col-lg-9">
+                        <div>Wasting Time</div>
+                        <div id="totalAssistTime" class="progress">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                      <div class="col-lg-3">
+                        <span id="totalAssistTimePercent"></span><br />
+                        <a href="javascript:void(0);" class="text text-primary" id="totalAssistTimeDetail">Click for detail</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
               </div>
             </div>
           </div>
@@ -134,13 +228,25 @@
     <div class="layout-overlay layout-menu-toggle"></div>
   </div>
   <!-- / Layout wrapper -->
-
+  <div class="modal fade" id="homeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="homeModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="homeModalBody"></div>
+        <div class="modal-footer" id="homeModalFooter"></div>
+      </div>
+    </div>
+  </div>
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
   <script src="<?= base_url(); ?>/assets/vendor/libs/jquery/jquery.js"></script>
   <script src="<?= base_url(); ?>/assets/vendor/libs/popper/popper.js"></script>
   <script src="<?= base_url(); ?>/assets/vendor/js/bootstrap.js"></script>
   <script src="<?= base_url(); ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
   <script src="<?= base_url(); ?>/assets/vendor/js/menu.js"></script>
   <!-- endbuild -->

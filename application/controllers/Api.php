@@ -26,10 +26,10 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->m_auth->checkSession($this->webSession)) {
-          $response->status = 401;
-          throw new Exception('Unauthorized');
-        }
+        // if (!$this->m_auth->checkSession($this->webSession)) {
+        //   $response->status = 401;
+        //   throw new Exception('Unauthorized');
+        // }
         $dbResponse = $this->m_db->selectAll($this->table);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
@@ -60,10 +60,10 @@ class Api extends CI_Controller
           $response->status = 404;
           throw new Exception('Table is required');
         }
-        if (!$this->m_auth->checkSession($this->webSession)) {
-          $response->status = 401;
-          throw new Exception('Unauthorized');
-        }
+        // if (!$this->m_auth->checkSession($this->webSession)) {
+        //   $response->status = 401;
+        //   throw new Exception('Unauthorized');
+        // }
         $dbResponse = null;
         if ($this->column) {
           $dbResponse = $this->m_db->selectByCustom($this->table, $this->column, $id);
@@ -339,6 +339,33 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'get') {
         $dbResponse = $this->m_db->getShipBranchDaily();
+        if (!$dbResponse->error['code']) {
+          $response->output = $dbResponse->output->result_array();
+          $response->status = 200;
+          $response->message = 'Success';
+        } else {
+          $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
+          throw new Exception('Internal server error');
+        }
+      } else {
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
+      }
+    } catch (Exception $e) {
+      $response->message = $e->getMessage();
+    }
+    echo $response->toJson();
+  }
+
+  public function homepage($feature)
+  {
+    header('Content-Type: application/json');
+    $response = new ApiResponse();
+
+    try {
+      if ($this->input->method() == 'get') {
+        $dbResponse = $this->m_db->getHomePage($feature);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
           $response->status = 200;

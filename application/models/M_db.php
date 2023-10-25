@@ -99,4 +99,61 @@ class M_db extends CI_Model
     $response->error = $this->db->error();
     return $response;
   }
+
+  public function getHomePage($feature)
+  {
+    $response = new DbResponse();
+    switch ($feature) {
+      case 'totalShips':
+        $response->output = $this->db->query("
+          SELECT b.name, COUNT(sd.id) AS count FROM shipdata sd
+          JOIN branch b ON b.id = sd.branchId
+          GROUP BY b.id
+          ORDER BY count DESC
+        ");
+        break;
+      case 'wastingTime':
+        $response->output = $this->db->query("
+          SELECT b.name, SUM(sd.wastingTimeNumber) AS count FROM shipdata sd
+          JOIN branch b ON b.id = sd.branchId
+          GROUP BY b.id
+          ORDER BY count ASC
+        ");
+        break;
+      case 'totalTonage':
+        $response->output = $this->db->query("
+          SELECT b.name, SUM(pd.cargoQuantity) AS count FROM pbmdata pd
+          JOIN branch b ON b.id = pd.branchId
+          GROUP BY b.id
+          ORDER BY count DESC;
+        ");
+        break;
+      case 'loadingRate':
+        $response->output = $this->db->query("
+          SELECT b.name, SUM(pd.totalHoursNumber) AS count FROM pbmdata pd
+          JOIN branch b ON b.id = pd.branchId
+          GROUP BY b.id
+          ORDER BY count ASC;
+        ");
+        break;
+      case 'totalShipsAssist':
+        $response->output = $this->db->query("
+          SELECT b.name, COUNT(td.id) AS count FROM tugdata td
+          JOIN branch b ON b.id = td.branchId
+          GROUP BY b.id
+          ORDER BY count DESC;
+        ");
+        break;
+      case 'totalAssistTime':
+        $response->output = $this->db->query("
+          SELECT b.name, SUM(td.assistDurationNumber) AS count FROM tugdata td
+          JOIN branch b ON b.id = td.branchId
+          GROUP BY b.id
+          ORDER BY count ASC;
+        ");
+        break;
+    }
+    $response->error = $this->db->error();
+    return $response;
+  }
 }
