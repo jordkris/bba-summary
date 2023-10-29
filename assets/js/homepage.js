@@ -43,6 +43,17 @@ let calculateDiff=(duration) => {
   }
   return intervalTime;
 }
+function randomColor() {
+  let characters='0123456789abcdef';
+  let randomString='';
+
+  for (let i=0; i<6; i++) {
+    let randomIndex=Math.floor(Math.random()*characters.length);
+    randomString+=characters.charAt(randomIndex);
+  }
+
+  return '#'+randomString;
+}
 
 $('#homeModal').on('hidden.bs.modal', function () {
   $('#homeModalTitle').empty();
@@ -50,6 +61,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
   $('#homeModalFooter').empty();
 });
 
+let chart;
 (async () => {
   let targets=await new Promise((resolve, reject) => {
     $.ajax({
@@ -77,11 +89,12 @@ $('#homeModal').on('hidden.bs.modal', function () {
       type: "GET",
       success: (res) => {
         if (res.status==200) {
-          let currentSingleData, percentData;
+          let currentSingleData, percentData, pieceLabel;
           currentSingleData=res.output.reduce((a, b) => a+parseInt(b.count), 0);
           switch (feature) {
             case 'totalShips':
               percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              pieceLabel=`${currentSingleData} of ${targets[feature]} Ships`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -92,6 +105,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
             case 'wastingTime':
               percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -102,6 +116,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
             case 'totalTonage':
               percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              pieceLabel=`${currentSingleData} of ${targets[feature]} Tons`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -112,6 +127,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
             case 'loadingRate':
               percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -122,6 +138,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
             case 'totalShipsAssist':
               percentData=round(currentSingleData/parseInt(targets[feature])*100);
+              pieceLabel=`${currentSingleData} of ${targets[feature]} Ships`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -132,6 +149,7 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
             case 'totalAssistTime':
               percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -144,118 +162,79 @@ $('#homeModal').on('hidden.bs.modal', function () {
               break;
           }
           $(`#${feature} > div`).css('width', percentData+'%');
-          $(`#${feature}Percent`).html(percentData+'%');
+          $(`#${feature} > div`).html(percentData+'%');
+          $(`#${feature}Percent`).html(pieceLabel);
+
           $(`#${feature}Detail`).click(() => {
+            let branchLabels=[], branchData=[], branchColors=[], branchTooltips, branchTotal;
             $('#homeModal').modal('show');
-            let content='';
             switch (feature) {
               case 'totalShips':
                 $('#homeModalTitle').html('Number of Ships details');
-                content+='<div class="list-group">';
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${r.count} Kapal</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${context.parsed} Ships`;
+                };
                 break;
               case 'wastingTime':
                 $('#homeModalTitle').html('Wasting Time details');
-                content+='<div class="list-group">';
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${calculateDiff(moment.duration(r.count, 'minutes'))}</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
+                };
                 break;
               case 'totalTonage':
                 $('#homeModalTitle').html('Total Tonnage details');
-                content+='<div class="list-group">';
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${r.count} ton</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${context.parsed} Ton`;
+                };
                 break;
               case 'loadingRate':
                 $('#homeModalTitle').html('Loading / Discharging Rate details');
-                content+='<div class="list-group">';
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${calculateDiff(moment.duration(r.count, 'minutes'))}</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
+                };
                 break;
               case 'totalShipsAssist':
                 $('#homeModalTitle').html('Number of Ship\'s Assist details');
-                content+='<div class="list-group">';
+                $('#homeModalTitle').html('Total Tonnage details');
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${r.count} Kapal</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${context.parsed} Ships`;
+                };
                 break;
               case 'totalAssistTime':
                 $('#homeModalTitle').html('Total Assist Time details');
-                content+='<div class="list-group">';
                 res.output.forEach((r) => {
-                  content+=`
-                    <a
-                      href="javascript:void(0);"
-                      class="list-group-item list-group-item-action flex-column align-items-start"
-                    >
-                      <div class="d-flex justify-content-between w-100">
-                        <h6>Cabang ${r.name}</h6>
-                        <p>${calculateDiff(moment.duration(r.count, 'minutes'))}</p>
-                      </div>
-                    </a>
-                  `;
+                  branchLabels.push('Cabang '+r.name);
+                  branchData.push(parseInt(r.count));
+                  branchColors.push(randomColor());
                 });
-                content+='</div>';
+                branchTooltips=(context) => {
+                  return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
+                };
                 break;
               default:
                 break;
@@ -265,10 +244,40 @@ $('#homeModal').on('hidden.bs.modal', function () {
                 Close <i class="bx bx-x"></i>
               </button>
             `);
-            $('#homeModalBody').html(content);
+            $('#homeModalBody').html(`
+              <div class="row">
+                <div class="col-lg-12" style="width: 80%;margin: 0 auto;">
+                  <canvas id="chartDetails"></canvas>
+                </div>
+                <div class="col-lg-12">
+                  <br />
+                  <h4 class="text text-primary text-center">${pieceLabel}</h4>
+                </div>
+              </div>
+            `);
+            let canvas=$('#chartDetails');
+            chart=new Chart(canvas, {
+              type: 'pie',
+              data: {
+                labels: branchLabels,
+                datasets: [{
+                  data: branchData,
+                  backgroundColor: branchColors
+                }]
+              },
+              options: {
+                plugins: {
+                  tooltip: {
+                    callbacks: {
+                      label: branchTooltips
+                    }
+                  }
+                }
+              }
+            });
           });
         } else {
-          showAlert('#bbaModalBody', 'danger', `(${res.status}) ${res.message}`);
+          showAlert('.content-wrapper', 'danger', `(${res.status}) ${res.message}`);
         }
       },
       error: (error) => {

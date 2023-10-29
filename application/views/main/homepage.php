@@ -133,7 +133,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="totalShipsPercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="totalShipsDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="totalShipsDetail">Click for detail</a>
                       </div>
                       <div class="col-lg-9">
                         <div>Wasting Time</div>
@@ -143,7 +143,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="wastingTimePercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="wastingTimeDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="wastingTimeDetail">Click for detail</a>
                       </div>
                     </div>
                   </div>
@@ -165,7 +165,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="totalTonagePercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="totalTonageDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="totalTonageDetail">Click for detail</a>
                       </div>
                       <div class="col-lg-9">
                         <div>Loading / Discharging Rate</div>
@@ -175,7 +175,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="loadingRatePercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="loadingRateDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="loadingRateDetail">Click for detail</a>
                       </div>
                     </div>
                   </div>
@@ -197,7 +197,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="totalShipsAssistPercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="totalShipsAssistDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="totalShipsAssistDetail">Click for detail</a>
                       </div>
                       <div class="col-lg-9">
                         <div>Total Assist Time</div>
@@ -207,7 +207,7 @@
                       </div>
                       <div class="col-lg-3">
                         <span id="totalAssistTimePercent"></span><br />
-                        <a href="javascript:void(0);" class="text text-primary" id="totalAssistTimeDetail">Click for detail</a>
+                        <a href="javascript:void(0);" class="badge rounded-pill bg-secondary text text-white" id="totalAssistTimeDetail">Click for detail</a>
                       </div>
                     </div>
                   </div>
@@ -247,6 +247,7 @@
   <script src="<?= base_url(); ?>/assets/vendor/js/bootstrap.js"></script>
   <script src="<?= base_url(); ?>/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script src="<?= base_url(); ?>/assets/vendor/js/menu.js"></script>
   <!-- endbuild -->

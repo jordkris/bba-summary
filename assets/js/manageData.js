@@ -144,7 +144,6 @@ let modalFunc=() => {
     let dp=toFloat($('#dp').val());
     let payment=toFloat($('#payment').val());
     let pph=toFloat($('#pph').val());
-    console.log(totalFDA,dp,payment,pph);
     $('#receivable').val(formatCurrency(totalFDA-dp-payment-pph));
   });
 
@@ -212,7 +211,6 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     });
   });
   if (branchId!='1') {
-    console.log(data);
     data=data.filter(d => d.branchId==branchId);
   }
   if (relationConfig) {
@@ -587,9 +585,6 @@ let showActivityTime=async (pbmId) => {
     success: async (response) => {
       let form='<form id="formActivityTime">';
       if (response.status==200) {
-        setTimeout(() => {
-          calculateActivityTime();
-        });
         if (response.output) {
           response.output.forEach((res) => {
             form+=activityTimeTemplate(res.id, res.start, res.stop);
@@ -613,7 +608,7 @@ let showActivityTime=async (pbmId) => {
       $('.activityTimeInput').change(() => {
         calculateActivityTime();
       });
-
+      calculateActivityTime();
       let oldData=response.output? JSON.stringify(response.output):JSON.stringify([]);
       localStorage.setItem('oldData', oldData);
       $('#activityTimeModalFooter').html(`
@@ -670,16 +665,18 @@ let submitActivityTime=(pbmId) => {
     try {
       let newData=$("#formActivityTime").serializeArray();
       let oldData=JSON.parse(localStorage.getItem('oldData'));
-      console.log(oldData);
-      console.log(newData);
+      // validate new data
+      newData.forEach((nd) => {
+        if (!nd.value) {
+          throw new Error('Start dan Stop tidak boleh kosong!');
+        }
+      })
       // for updating/deleting old to new data
       let found;
       oldData.forEach((od) => {
         found=false;
         newData.forEach((nd) => {
           let ndNameSplitted=nd.name.split('-');
-          if (!nd.value) reject({ htmlButtonCache: htmlButtonCache, message: 'Start dan Stop tidak boleh kosong!' });
-          // edit activity time
           if (od.id==ndNameSplitted[1]) {
             found=true;
             let inputData={};
@@ -830,7 +827,6 @@ $('#submitTarget').click(() => {
   let formData=JSON.stringify(
     serializeToJson($("#monthlyTarget").serializeArray())
   );
-  console.log
   $.ajax({
     url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
     type: "POST",
