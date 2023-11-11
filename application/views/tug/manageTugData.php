@@ -14,6 +14,7 @@
               <th>Tipe Kapal</th>
               <th>GRT</th>
               <th>Kegiatan</th>
+              <th>Lokasi Pelabuhan</th>
               <th>Cabang</th>
               <th>Jam Connect Kapal</th>
               <th>Jam Disconnect Kapal</th>

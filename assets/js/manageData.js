@@ -54,6 +54,12 @@ let formatCurrency=(number) => {
 // remove dots
 let toFloat=(number) => parseFloat(number.replace(/[^0-9]/g, ''));
 
+/**
+ * Calculates the time difference between the given duration and the current time.
+ *
+ * @param {moment.Duration} duration - The duration to calculate the difference from.
+ * @return {string} - The time difference in human-readable format.
+ */
 let calculateDiff=(duration) => {
   let years=Math.floor(duration.asYears());
   duration.subtract(moment.duration(years, 'years'));
@@ -86,6 +92,12 @@ let calculateDiff=(duration) => {
   }
   return intervalTime;
 }
+
+/**
+ * Generates a function comment for the given function body.
+ *
+ * @return {undefined} - No return value
+ */
 let modalFunc=() => {
   // calculate wasting time
   $('#issuedTimeSPB,#finishLoad').change((e) => {
@@ -119,16 +131,16 @@ let modalFunc=() => {
   // set Admin privileges as All Branch
   $('#roleId').change((e) => {
     if ($('#branchId').val()!='1'&&$('#roleId').val()=='1') {
-      $('#branchId').val('1');
+      $('#branchId').val('1').trigger('change');
     } if ($('#branchId').val()=='1'&&$('#roleId').val()!='1') {
-      $('#branchId').val('');
+      $('#branchId').val('').trigger('change');
     }
   });
   $('#branchId').change((e) => {
     if ($('#branchId').val()=='1'&&$('#roleId').val()!='1') {
-      $('#roleId').val('1');
+      $('#roleId').val('1').trigger('change');
     } else if ($('#branchId').val()!='1'&&$('#roleId').val()=='1') {
-      $('#roleId').val('');
+      $('#roleId').val('').trigger('change');
     }
   });
 
@@ -152,8 +164,20 @@ let modalFunc=() => {
     e.target.value=formatCurrency(toFloat(e.target.value));
   });
 
+  // change to select2
+  $('.form-select').select2({
+    dropdownParent: $("#bbaModal .modal-content")
+  });
 }
 
+/**
+ * Retrieves relation data from the API.
+ *
+ * @param {string} id - The ID of the data to retrieve.
+ * @param {string} table - The table to retrieve the data from.
+ * @param {string} column - The column of the data to retrieve.
+ * @return {Promise} A promise that resolves with the retrieved data or rejects with an error message.
+ */
 let getRelationData=async (id, table, column) => {
   return new Promise((resolve, reject) => {
     $.ajax({

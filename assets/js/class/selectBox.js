@@ -44,9 +44,8 @@ class SelectBox {
             <option value=""></option>
             ${selectOption}
           </select>
-          <label>${this.label}</label>
-          <div class="form-text">
-            ${this.help==''? '':'<i class="bx bx-info-circle"></i>'+this.help} 
+          <div class="form-text" style="color: #696cff">
+            ${this.help==''? '':`<i class="bx bx-info-circle"></i> ${this.label} : `+this.help} 
           </div>
           <div class="dropdown-divider"></div>
         </div>

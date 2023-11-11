@@ -11,6 +11,7 @@ readData('#tugData', 'tugdata', [
   { data: "shipTypeId", visible: false },
   { data: "grt", visible: false },
   { data: "activityId", visible: false },
+  { data: "harborLocationId", visible: false },
   { data: "branchId" },
   { data: "connectTime", visible: false },
   { data: "disconnectTime", visible: false },
@@ -34,9 +35,13 @@ readData('#tugData', 'tugdata', [
   column: 'name',
   sourceColumn: 'shipTypeId'
 }, {
-  table: 'activity',
+  table: 'tugactivity',
   column: 'name',
   sourceColumn: 'activityId'
+}, {
+  table: 'harborlocation',
+  column: 'name',
+  sourceColumn: 'harborLocationId'
 }, {
   table: 'branch',
   column: 'name',
@@ -48,14 +53,14 @@ readData('#tugData', 'tugdata', [
       text: `<i class="bx bxs-cloud-download"></i> Export to CSV`,
       title: 'Data Tug '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(9)
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(10)
       }
     }, {
       extend: 'excel',
       text: `<i class="bx bxs-cloud-download"></i> Export to Excel`,
       title: 'Data Tug '+moment().format('YYYY-MM-DD HH.mm'),
       exportOptions: {
-        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(9)
+        columns: (n => Array.from({ length: n+1 }, (_, i) => i))(10)
       }
     },
     'colvis'

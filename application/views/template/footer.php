@@ -11,12 +11,12 @@
 <!-- / Layout wrapper -->
 
 <!-- Modals -->
-<div class="modal fade" id="bbaModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="bbaModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="bbaModalTitle"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="bbaModalBody"></div>
       <div class="modal-footer" id="bbaModalFooter"></div>
@@ -115,6 +115,9 @@
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
   localStorage.setItem('session', '<?= $profile['session']; ?>');
   localStorage.setItem('roleId', '<?= $this->session->userdata('roleId'); ?>');

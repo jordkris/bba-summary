@@ -275,6 +275,66 @@
       "name": ""
     }
   },
+  "tugactivity": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id kegiatan"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Nama Kegiatan Tug",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Nama kegiatan Tug"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
+  "harborlocation": {
+    "inputConfig": [
+      {
+        "key": "id",
+        "type": "InputBox",
+        "options": {
+          "label": "Id",
+          "type": "text",
+          "isEnabled": false,
+          "isReadOnly": false,
+          "help": "Id lokasi pelabuhan"
+        }
+      },
+      {
+        "key": "name",
+        "type": "InputBox",
+        "options": {
+          "label": "Lokasi Pelabuhan Tug",
+          "type": "text",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "lokasi pelabukan tug"
+        }
+      }
+    ],
+    "outputConfig": {
+      "id": "",
+      "name": ""
+    }
+  },
   "shipdata": {
     "inputConfig": [
       {
@@ -833,7 +893,18 @@
           "isEnabled": true,
           "isReadOnly": false,
           "help": "Kegiatan",
-          "optionsTable": "activity"
+          "optionsTable": "tugactivity"
+        }
+      },
+      {
+        "key": "harborLocationId",
+        "type": "SelectBox",
+        "options": {
+          "label": "Lokasi Pelabuhan Tug",
+          "isEnabled": true,
+          "isReadOnly": false,
+          "help": "Lokasi Pelabuhan Tug",
+          "optionsTable": "harborlocation"
         }
       },
       {
@@ -899,6 +970,7 @@
       "shipTypeId": "",
       "grt": "",
       "activityId": "",
+      "harborLocationId": "",
       "branchId": "",
       "connectTime": "",
       "disconnectTime": "",
