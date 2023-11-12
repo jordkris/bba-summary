@@ -242,9 +242,9 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     let end=relationConfig.length*Object.keys(data).length;
     for (rc of relationConfig) {
       for (d of data) {
-        $('#datatableProgress > div').css('width', `${current/end*100}%`);
         d[rc.sourceColumn]=await getRelationData(d[rc.sourceColumn], rc.table, rc.column);
         current++;
+        $('#datatableProgress > div').css('width', `${current/end*100}%`);
       }
     }
   }
