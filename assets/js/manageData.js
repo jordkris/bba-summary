@@ -821,58 +821,106 @@ let submitActivityTime=(pbmId) => {
   });;
 }
 
-// target
-$.ajax({
-  url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
-  type: "GET",
-  beforeSend: (request) => {
-    request.setRequestHeader("session", session);
-    request.setRequestHeader("table", 'target');
-    request.setRequestHeader("column", 'month');
-  },
-  success: (response) => {
-    if (response.status==200) {
-      for (let key in response.output[0]) {
-        $(`input[name="${key}"]`).val(response.output[0][key]);
-        if (key=='id') {
-          localStorage.setItem('targetId', response.output[0][key]);
-        }
-      }
-    } else {
-      console.error(response.message);
-    }
-  },
-  error: (error) => {
-    console.error(error.responseJSON.message);
-  },
-});
-
-$('#submitTarget').click(() => {
-  let formData=JSON.stringify(
-    serializeToJson($("#monthlyTarget").serializeArray())
-  );
-  $.ajax({
-    url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
-    type: "POST",
-    data: formData,
-    dataType: "json",
-    contentType: "application/json",
+(async () => {
+  // auto update target per Month
+  let thisMonth=moment().format('YYYY-MM')+'-00';
+  await $.ajax({
+    url: baseUrl+"/api/getById/"+thisMonth,
+    type: "GET",
     beforeSend: (request) => {
       request.setRequestHeader("session", session);
       request.setRequestHeader("table", 'target');
+      request.setRequestHeader("column", 'month');
     },
     success: (response) => {
-      if (response.status==200) {
-        showAlert('#monthlyTarget', 'success', response.message);
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
-      } else {
-        showAlert('#monthlyTarget', 'danger', response.message);
+      if (!response.output) {
+        $.ajax({
+          url: baseUrl+"/api/add",
+          type: "POST",
+          data: JSON.stringify({
+            month: thisMonth,
+            totalShips: 0,
+            wastingTime: 0,
+            totalTonage: 0,
+            loadingRate: 0,
+            totalShipsAssist: 0,
+            totalAssistTime: 0
+          }),
+          dataType: "json",
+          contentType: "application/json",
+          beforeSend: (request) => {
+            request.setRequestHeader("session", session);
+            request.setRequestHeader("table", 'target');
+          },
+          success: (response) => {
+            if (response.status!=200) {
+              console.error(response.message);
+            }
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
       }
     },
     error: (error) => {
-      showAlert('#monthlyTarget', 'danger', error);
+      console.error(error);
     }
   });
-});
+
+  // target
+  await $.ajax({
+    url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
+    type: "GET",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'target');
+      request.setRequestHeader("column", 'month');
+    },
+    success: (response) => {
+      if (response.status==200) {
+        for (let key in response.output[0]) {
+          $(`input[name="${key}"]`).val(response.output[0][key]);
+          if (key=='id') {
+            localStorage.setItem('targetId', response.output[0][key]);
+          }
+        }
+      } else {
+        console.error(response.message);
+      }
+    },
+    error: (error) => {
+      console.error(error.responseJSON.message);
+    },
+  });
+
+  $('#submitTarget').click(() => {
+    let formData=JSON.stringify(
+      serializeToJson($("#monthlyTarget").serializeArray())
+    );
+    $.ajax({
+      url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
+      type: "POST",
+      data: formData,
+      dataType: "json",
+      contentType: "application/json",
+      beforeSend: (request) => {
+        request.setRequestHeader("session", session);
+        request.setRequestHeader("table", 'target');
+      },
+      success: (response) => {
+        if (response.status==200) {
+          showAlert('#monthlyTarget', 'success', response.message);
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        } else {
+          showAlert('#monthlyTarget', 'danger', response.message);
+        }
+      },
+      error: (error) => {
+        showAlert('#monthlyTarget', 'danger', error);
+      }
+    });
+  });
+})()
