@@ -33,6 +33,26 @@ class Api extends CI_Controller
         $dbResponse = $this->m_db->selectAll($this->table);
         if (!$dbResponse->error['code']) {
           $response->output = $dbResponse->output->result_array();
+          if ($this->input->get('relationConfig')) {
+            $relationConfig = json_decode($this->input->get('relationConfig'), true);
+            $relationData = [];
+            $sourceColumn = [];
+            foreach ($relationConfig as $rc) {
+              $relationResult = $this->m_db->selectAll($rc['table'])->output->result_array();
+              $relationData[$rc['sourceColumn']] = [];
+              foreach ($relationResult as $r) {
+                $relationData[$rc['sourceColumn']][$r['id']] = $r;
+              }
+              $sourceColumn[] = $rc['sourceColumn'];
+            }
+            foreach ($response->output as &$ro) {
+              foreach ($ro as $key => $value) {
+                if(in_array($key, $sourceColumn)) {
+                  $ro[$key] = $relationData[$key][$value]['name'];
+                }
+              }
+            }
+          }
           $response->status = 200;
           $response->message = 'Success';
         } else {

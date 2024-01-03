@@ -4,6 +4,9 @@
     <h5 class="card-header"><?= $title; ?></h5>
     <div class="card-body">
       <button type="button" class="btn btn-primary" onclick="addData('Tambah Data Piutang Kapal', 'shipreceivabledata')">Tambah Data Piutang Kapal <i class="bx bx-plus"></i></button>
+      <div id="datatableProgress" class="spinner-grow text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
       <div class="table-responsive-lg">
         <table id="shipReceivable" class="table table-striped">
           <thead>
@@ -35,11 +38,7 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <div id="datatableProgress" class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </tbody>
+          <tbody></tbody>
         </table>
       </div>
     </div>

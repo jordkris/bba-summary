@@ -134,5 +134,4 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <script src="<?= base_url(); ?>/assets/js/custom.js"></script>
 </body>
-
 </html>

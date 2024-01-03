@@ -122,6 +122,9 @@
                   <a class="btn btn-outline-secondary w-100" href="<?= base_url('home'); ?>"><i class="bx bx-arrow-back"></i> Back to Home Page</a>
                 </div>
               </form>
+				<footer>
+					<center>Bug Report : 0823.5205.9054 (Idris)</center>
+				</footer>
             </div>
           </div>
           <!-- /Register -->
@@ -154,4 +157,8 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     
   </body>
+<footer>
+	<center>&copy;2023 Port Division | Bosowa Energy Group</center>
+</footer>
+<br></br>
 </html>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>BOSOWA BANDAR | Homepage</title>
+  <title>BOSOWA BANDAR | HOMEPAGE</title>
 
   <meta name="description" content="" />
 
@@ -76,7 +76,7 @@
             </a>
           </li>
           <!-- Login -->
-          <li class="menu-item">
+          <li class="menu-item active">
             <a href="<?= base_url('auth'); ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-log-in"></i>
               <div data-i18n="Analytics">Login</div>
@@ -102,14 +102,13 @@
             <div class="navbar-nav align-items-center">
               <div class="nav-item d-flex align-items-center">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
+                <input type="text" class="form-control border-0 shadow-none" placeholder="Bosowa Bandar Dashboard" aria-label="Bosowa Bandar Dashboard" />
               </div>
             </div>
             <!-- /Search -->
 
           </div>
         </nav>
-
         <!-- / Navbar -->
 
         <!-- Content wrapper -->
@@ -127,7 +126,7 @@
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Number of Ships</div>
-                        <div id="totalShips" class="progress">
+                        <div id="totalShips" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -137,7 +136,7 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Wasting Time</div>
-                        <div id="wastingTime" class="progress">
+                        <div id="wastingTime" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -159,7 +158,7 @@
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Total Tonnage</div>
-                        <div id="totalTonage" class="progress">
+                        <div id="totalTonage" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -169,7 +168,7 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Loading / Discharging Rate</div>
-                        <div id="loadingRate" class="progress">
+                        <div id="loadingRate" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -191,7 +190,7 @@
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Number of Ship's Assist</div>
-                        <div id="totalShipsAssist" class="progress">
+                        <div id="totalShipsAssist" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -201,7 +200,7 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Total Assist Time</div>
-                        <div id="totalAssistTime" class="progress">
+                        <div id="totalAssistTime" class="progress" style="height: 25px;">
                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
@@ -265,5 +264,8 @@
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
-
+<footer>
+	<center>&copy;2023 Port Division | Bosowa Energy Group</center>
+</footer>
+<br></br>
 </html>

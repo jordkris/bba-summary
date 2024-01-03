@@ -216,7 +216,7 @@ let getRelationData=async (id, table, column) => {
 let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConfig=null, customFilter=null) => {
   let data=await new Promise((resolve, reject) => {
     $.ajax({
-      url: baseUrl+'/api/getAll',
+      url: baseUrl+'/api/getAll'+(relationConfig? '?relationConfig='+encodeURI(JSON.stringify(relationConfig)):''),
       type: "GET",
       beforeSend: (request) => {
         request.setRequestHeader("session", session);
@@ -237,17 +237,17 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
   if (branchId!='1') {
     data=data.filter(d => d.branchId==branchId);
   }
-  if (relationConfig) {
-    let current=0;
-    let end=relationConfig.length*Object.keys(data).length;
-    for (rc of relationConfig) {
-      for (d of data) {
-        d[rc.sourceColumn]=await getRelationData(d[rc.sourceColumn], rc.table, rc.column);
-        current++;
-        $('#datatableProgress > div').css('width', `${current/end*100}%`);
-      }
-    }
-  }
+  // if (relationConfig) {
+  //   let current=0;
+  //   let end=relationConfig.length*Object.keys(data).length;
+  //   for (rc of relationConfig) {
+  //     for (d of data) {
+  //       d[rc.sourceColumn]=await getRelationData(d[rc.sourceColumn], rc.table, rc.column);
+  //       current++;
+  //       $('#datatableProgress > div').css('width', `${current/end*100}%`);
+  //     }
+  //   }
+  // }
   $('#datatableProgress > div').css('width', '100%');
   $(dtDom).DataTable({
     dom: `
