@@ -5,6 +5,8 @@ class Api extends CI_Controller
 {
   public $table;
   public $webSession;
+  public $month;
+  public $branchId;
   public function __construct()
   {
     parent::__construct();
@@ -14,7 +16,7 @@ class Api extends CI_Controller
     $this->column = isset($header['column']) ? $header['column'] : null;
     $this->webSession = isset($header['session']) ? $header['session'] : null;
     $this->month = isset($header['month']) ? $header['month'] : null;
-    $this->branchId = isset($header['branchId']) ? $header['branchId'] : null;
+    $this->branchId = isset($header['branchid']) ? $header['branchid'] : null;
   }
 
 
@@ -49,7 +51,7 @@ class Api extends CI_Controller
             }
             foreach ($response->output as &$ro) {
               foreach ($ro as $key => $value) {
-                if(in_array($key, $sourceColumn)) {
+                if (in_array($key, $sourceColumn)) {
                   $ro[$key] = $relationData[$key][$value]['name'];
                 }
               }

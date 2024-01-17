@@ -1,7 +1,7 @@
 let session=localStorage.getItem("session");
 let baseUrl=localStorage.getItem("baseUrl");
 let roleId=localStorage.getItem("roleId");
-let branchId=localStorage.getItem("branchId");
+let branchID=localStorage.getItem("branchId");
 let thisMonth=moment().format('YYYY-MM')+'-00';
 
 let dataConfig=new Promise((resolve, reject) => {
@@ -263,8 +263,8 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
       },
     });
   });
-  if (branchId!='1') {
-    let branch=await getBranch(branchId);
+  if (branchID!='1') {
+    let branch=await getBranch(branchID);
     data=data.filter(d => d.branchId.toLowerCase()==branch.name.toLowerCase());
   }
   if (table=='branch') {
@@ -289,7 +289,7 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
         },
       });
     });
-    data=data.map((d) => {
+    data=data.filter(d => d.id!=1).map((d) => {
       d.totalShips=allBranchTarget.filter(t => t.branchId==d.id)[0].totalShips;
       d.wastingTime=allBranchTarget.filter(t => t.branchId==d.id)[0].wastingTime;
       d.totalTonage=allBranchTarget.filter(t => t.branchId==d.id)[0].totalTonage;
@@ -297,7 +297,7 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
       d.totalShipsAssist=allBranchTarget.filter(t => t.branchId==d.id)[0].totalShipsAssist;
       d.totalAssistTime=allBranchTarget.filter(t => t.branchId==d.id)[0].totalAssistTime;
       return d;
-    }).filter(d => d.id!=1);
+    });
   }
   // if (relationConfig) {
   //   let current=0;
@@ -982,12 +982,12 @@ let manageTarget=async (title, branchId) => {
                     <input name="totalAssistTime" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.totalAssistTime}" />
                     <label>Total Assist Time (jam)</label>
                     <div class="form-text">
-                      <i class="bx bx-info-circle"></i> Target lama assit (jam)
+                      <i class="bx bx-info-circle"></i> Target lama assist (jam)
                     </div>
                   </div>
                 </div>
               </div>
-            <form id="targetForm">
+            </form>
           `;
           $('#bbaModalBody').html(form);
           $('#bbaModalFooter').html(`
