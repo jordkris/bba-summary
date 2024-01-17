@@ -54,7 +54,7 @@ class Admin extends CI_Controller
     $this->load->view('template/footer');
   }
   public function manageBranch() {
-    $this->data['title'] = 'Kelola Cabang';
+    $this->data['title'] = 'Kelola Cabang & Target ('.date('F Y').')';
     $this->load->view('template/header', $this->data);
     $this->load->view('template/sidebar');
     $this->load->view('template/navbar');

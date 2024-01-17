@@ -37,7 +37,8 @@ class M_db extends CI_Model
   public function insert($table, $data)
   {
     $response = new DbResponse();
-    $response->output = $this->db->insert($table, $data);
+    $this->db->insert($table, $data);
+    $response->output = $this->db->insert_id();
     $response->error = $this->db->error();
     return $response;
   }
@@ -56,6 +57,18 @@ class M_db extends CI_Model
     $response = new DbResponse();
     $this->db->where($key, $value);
     $response->output = $this->db->update($tableName, $data);
+    $response->error = $this->db->error();
+    return $response;
+  }
+
+  public function updateTarget($data, $month, $branchId)
+  {
+    $response = new DbResponse();
+    $this->db->where([
+      'month' => $month,
+      'branchId' => $branchId
+    ]);
+    $response->output = $this->db->update('target', $data);
     $response->error = $this->db->error();
     return $response;
   }
@@ -106,7 +119,7 @@ class M_db extends CI_Model
     switch ($feature) {
       case 'totalShips':
         $response->output = $this->db->query("
-          SELECT b.name, COUNT(sd.id) AS count FROM shipdata sd
+          SELECT b.id, b.name, COUNT(sd.id) AS count FROM shipdata sd
           JOIN branch b ON b.id = sd.branchId
           WHERE MONTH(sd.issuedTimeSPB) = MONTH(CURRENT_DATE()) AND YEAR(sd.issuedTimeSPB) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
@@ -115,7 +128,7 @@ class M_db extends CI_Model
         break;
       case 'wastingTime':
         $response->output = $this->db->query("
-          SELECT b.name, SUM(sd.wastingTimeNumber) AS count FROM shipdata sd
+          SELECT b.id, b.name, SUM(sd.wastingTimeNumber) AS count FROM shipdata sd
           JOIN branch b ON b.id = sd.branchId
           WHERE MONTH(sd.issuedTimeSPB) = MONTH(CURRENT_DATE()) AND YEAR(sd.issuedTimeSPB) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
@@ -124,7 +137,7 @@ class M_db extends CI_Model
         break;
       case 'totalTonage':
         $response->output = $this->db->query("
-          SELECT b.name, SUM(pd.cargoQuantity) AS count FROM pbmdata pd
+          SELECT b.id, b.name, SUM(pd.cargoQuantity) AS count FROM pbmdata pd
           JOIN branch b ON b.id = pd.branchId
           WHERE MONTH(pd.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(pd.createdDate) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
@@ -133,7 +146,7 @@ class M_db extends CI_Model
         break;
       case 'loadingRate':
         $response->output = $this->db->query("
-          SELECT b.name, SUM(pd.totalHoursNumber) AS count FROM pbmdata pd
+          SELECT b.id, b.name, SUM(pd.totalHoursNumber) AS count FROM pbmdata pd
           JOIN branch b ON b.id = pd.branchId
           WHERE MONTH(pd.createdDate) = MONTH(CURRENT_DATE()) AND YEAR(pd.createdDate) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
@@ -142,7 +155,7 @@ class M_db extends CI_Model
         break;
       case 'totalShipsAssist':
         $response->output = $this->db->query("
-          SELECT b.name, COUNT(td.id) AS count FROM tugdata td
+          SELECT b.id, b.name, COUNT(td.id) AS count FROM tugdata td
           JOIN branch b ON b.id = td.branchId
           WHERE MONTH(td.connectTime) = MONTH(CURRENT_DATE()) AND YEAR(td.connectTime) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id
@@ -151,7 +164,7 @@ class M_db extends CI_Model
         break;
       case 'totalAssistTime':
         $response->output = $this->db->query("
-          SELECT b.name, SUM(td.assistDurationNumber) AS count FROM tugdata td
+          SELECT b.id, b.name, SUM(td.assistDurationNumber) AS count FROM tugdata td
           JOIN branch b ON b.id = td.branchId
           WHERE MONTH(td.connectTime) = MONTH(CURRENT_DATE()) AND YEAR(td.connectTime) = YEAR(CURRENT_DATE()) 
           GROUP BY b.id

@@ -13,6 +13,12 @@
             <tr>
               <th>#</th>
               <th>Nama Cabang</th>
+              <th>Number of Ships</th>
+              <th>Wasting Time</th>
+              <th>Total Tonnage</th>
+              <th>Loading / Discharging Rate</th>
+              <th>Number of Ship's Assist</th>
+              <th>Total Assist Time</th>
               <th>Action</th>
             </tr>
           </thead>

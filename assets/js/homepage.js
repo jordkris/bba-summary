@@ -61,7 +61,87 @@ $('#homeModal').on('hidden.bs.modal', function () {
   $('#homeModalFooter').empty();
 });
 
-let chart;
+let createChart=(id, labels, data, tooltipFn) => {
+  new Chart($(id), {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: ['blue', 'red']
+      }]
+    },
+    options: {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: tooltipFn
+          }
+        }
+      }
+    }
+  });
+}
+
+let getAllBranch=async () => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+"/api/getAll",
+      type: "GET",
+      beforeSend: (request) => {
+        request.setRequestHeader("table", 'branch');
+      },
+      success: (response) => {
+        if (response.status==200) {
+          resolve(response.output);
+        }
+      },
+      error: (error) => {
+        reject(error.message);
+      }
+    })
+  })
+}
+
+let generateChart=(data, targets, branchTarget, feature, unit, tooltipFn, toMinutes=false) => {
+  $('#homeModalBody').append('<div id="charts" class="row"></div>');
+  data.forEach((d) => {
+    branchData=[];
+    branchLabels=[];
+    branchTarget=targets.filter(t => t.branchId==d.id)[0];
+    let achieved=parseInt(d.count);
+    let target=toMinutes? parseInt(branchTarget[feature])*60:parseInt(branchTarget[feature]);
+    let remaining;
+    if (target-achieved>0) {
+      remaining=target-achieved
+    } else {
+      remaining=0
+    }
+    branchData.push(achieved);
+    branchData.push(remaining);
+    $('#charts').append(`
+      <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-12" style="width: 80%;margin: 0 auto;">
+            <canvas id="chart${d.name.replaceAll(' ', '')}"></canvas>
+          </div>
+          <div class="col-lg-12">
+            <br />
+            <p class="text text-success text-center">(${toMinutes? Math.round(achieved/60):achieved} of ${toMinutes? Math.round(target/60):target} ${unit})</p>
+            <h4 class="text text-primary text-center">${d.name}</h4>
+          </div>
+          <div class="col-lg-12">
+            <div class="dropdown-divider"></div>
+          </div>
+        </div>
+      </div>
+    `);
+    branchLabels.push('Achieved');
+    branchLabels.push('Remaining');
+    createChart(`#chart${d.name.replaceAll(' ', '')}`, branchLabels, branchData, tooltipFn);
+  });
+}
+
 (async () => {
   let targets=await new Promise((resolve, reject) => {
     $.ajax({
@@ -73,7 +153,7 @@ let chart;
       },
       success: (response) => {
         if (response.status==200) {
-          resolve(response.output[0]);
+          resolve(response.output);
         } else {
           reject(res.message);
         }
@@ -83,18 +163,24 @@ let chart;
       },
     });
   });
+  let allBranch=(await getAllBranch()).filter((b) => b.id!=1);
+  let allBranchTarget={};
+  let currentSingleData, percentData, pieceLabel;
   ['totalShips', 'wastingTime', 'totalTonage', 'loadingRate', 'totalShipsAssist', 'totalAssistTime'].forEach((feature) => {
     $.ajax({
       url: baseUrl+'/api/homepage/'+feature,
       type: "GET",
       success: (res) => {
         if (res.status==200) {
-          let currentSingleData, percentData, pieceLabel;
+          allBranchTarget[feature]=0;
+          targets.forEach((target) => {
+            allBranchTarget[feature]+=parseInt(target[feature]);
+          });
           currentSingleData=res.output.reduce((a, b) => a+parseInt(b.count), 0);
           switch (feature) {
             case 'totalShips':
-              percentData=round(currentSingleData/parseInt(targets[feature])*100);
-              pieceLabel=`${currentSingleData} of ${targets[feature]} Ships`;
+              percentData=round(currentSingleData/parseInt(allBranchTarget[feature])*100);
+              pieceLabel=`${currentSingleData} of ${allBranchTarget[feature]} Ships`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -104,8 +190,8 @@ let chart;
               }
               break;
             case 'wastingTime':
-              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
-              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
+              percentData=round(currentSingleData/(parseInt(allBranchTarget[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${allBranchTarget[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -115,8 +201,8 @@ let chart;
               }
               break;
             case 'totalTonage':
-              percentData=round(currentSingleData/parseInt(targets[feature])*100);
-              pieceLabel=`${currentSingleData} of ${targets[feature]} Tons`;
+              percentData=round(currentSingleData/parseInt(allBranchTarget[feature])*100);
+              pieceLabel=`${currentSingleData} of ${allBranchTarget[feature]} Tons`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -126,8 +212,8 @@ let chart;
               }
               break;
             case 'loadingRate':
-              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
-              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
+              percentData=round(currentSingleData/(parseInt(allBranchTarget[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${allBranchTarget[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -137,8 +223,8 @@ let chart;
               }
               break;
             case 'totalShipsAssist':
-              percentData=round(currentSingleData/parseInt(targets[feature])*100);
-              pieceLabel=`${currentSingleData} of ${targets[feature]} Ships`;
+              percentData=round(currentSingleData/parseInt(allBranchTarget[feature])*100);
+              pieceLabel=`${currentSingleData} of ${allBranchTarget[feature]} Ships`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-danger');
               } else if (percentData>=33&&percentData<66) {
@@ -148,8 +234,8 @@ let chart;
               }
               break;
             case 'totalAssistTime':
-              percentData=round(currentSingleData/(parseInt(targets[feature])*60)*100);
-              pieceLabel=`${Math.round(currentSingleData/60)} of ${targets[feature]} Hours`;
+              percentData=round(currentSingleData/(parseInt(allBranchTarget[feature])*60)*100);
+              pieceLabel=`${Math.round(currentSingleData/60)} of ${allBranchTarget[feature]} Hours`;
               if (percentData>0&&percentData<33) {
                 $(`#${feature} > div`).addClass('bg-success');
               } else if (percentData>=33&&percentData<66) {
@@ -164,77 +250,55 @@ let chart;
           $(`#${feature} > div`).css('width', percentData+'%');
           $(`#${feature} > div`).html(percentData+'%');
           $(`#${feature}Percent`).html(pieceLabel);
-
+          allBranch.forEach((branch) => {
+            if (res.output.filter((r) => r.id==branch.id).length==0) {
+              res.output.push({
+                id: branch.id,
+                name: branch.name,
+                count: 0
+              });
+            }
+          });
           $(`#${feature}Detail`).click(() => {
-            let branchLabels=[], branchData=[], branchColors=[], branchTooltips, branchTotal;
+            let branchLabels, branchData, branchColors=[], branchTarget;
             $('#homeModal').modal('show');
+
             switch (feature) {
               case 'totalShips':
                 $('#homeModalTitle').html('Number of Ships details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
+                generateChart(res.output, targets, branchTarget, feature, 'Ships', (context) => {
+                  return `${context.parsed} Ships`;
                 });
-                branchTooltips=(context) => {
-                  return ` ${context.parsed} Ships`;
-                };
                 break;
               case 'wastingTime':
                 $('#homeModalTitle').html('Wasting Time details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
-                });
-                branchTooltips=(context) => {
+                generateChart(res.output, targets, branchTarget, feature, 'Hours', (context) => {
                   return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
-                };
+                }, true);
                 break;
               case 'totalTonage':
                 $('#homeModalTitle').html('Total Tonnage details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
+                generateChart(res.output, targets, branchTarget, feature, 'Ton', (context) => {
+                  return ` ${context.parsed} Tons`;
                 });
-                branchTooltips=(context) => {
-                  return ` ${context.parsed} Ton`;
-                };
                 break;
               case 'loadingRate':
                 $('#homeModalTitle').html('Loading / Discharging Rate details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
-                });
-                branchTooltips=(context) => {
+                generateChart(res.output, targets, branchTarget, feature, 'Hours', (context) => {
                   return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
-                };
+                }, true);
                 break;
               case 'totalShipsAssist':
                 $('#homeModalTitle').html('Number of Ship\'s Assist details');
-                $('#homeModalTitle').html('Total Tonnage details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
-                });
-                branchTooltips=(context) => {
+                generateChart(res.output, targets, branchTarget, feature, 'Ships', (context) => {
                   return ` ${context.parsed} Ships`;
-                };
+                });
                 break;
               case 'totalAssistTime':
                 $('#homeModalTitle').html('Total Assist Time details');
-                res.output.forEach((r) => {
-                  branchLabels.push('Cabang '+r.name);
-                  branchData.push(parseInt(r.count));
-                  branchColors.push(randomColor());
-                });
-                branchTooltips=(context) => {
+                generateChart(res.output, targets, branchTarget, feature, 'Hours', (context) => {
                   return ` ${Math.round(context.parsed/60)} jam (${calculateDiff(moment.duration(context.parsed, 'minutes'))})`;
-                };
+                }, true);
                 break;
               default:
                 break;
@@ -244,37 +308,6 @@ let chart;
                 Close <i class="bx bx-x"></i>
               </button>
             `);
-            $('#homeModalBody').html(`
-              <div class="row">
-                <div class="col-lg-12" style="width: 80%;margin: 0 auto;">
-                  <canvas id="chartDetails"></canvas>
-                </div>
-                <div class="col-lg-12">
-                  <br />
-                  <h4 class="text text-primary text-center">${pieceLabel}</h4>
-                </div>
-              </div>
-            `);
-            let canvas=$('#chartDetails');
-            chart=new Chart(canvas, {
-              type: 'pie',
-              data: {
-                labels: branchLabels,
-                datasets: [{
-                  data: branchData,
-                  backgroundColor: branchColors
-                }]
-              },
-              options: {
-                plugins: {
-                  tooltip: {
-                    callbacks: {
-                      label: branchTooltips
-                    }
-                  }
-                }
-              }
-            });
           });
         } else {
           showAlert('.content-wrapper', 'danger', `(${res.status}) ${res.message}`);

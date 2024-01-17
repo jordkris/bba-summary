@@ -2,6 +2,7 @@ let session=localStorage.getItem("session");
 let baseUrl=localStorage.getItem("baseUrl");
 let roleId=localStorage.getItem("roleId");
 let branchId=localStorage.getItem("branchId");
+let thisMonth=moment().format('YYYY-MM')+'-00';
 
 let dataConfig=new Promise((resolve, reject) => {
   try {
@@ -171,6 +172,34 @@ let modalFunc=() => {
 }
 
 /**
+ * Retrieves a branch object by its ID from the server.
+ *
+ * @param {number} branchId - The ID of the branch to retrieve.
+ * @return {Promise} A promise that resolves with the branch object if the request is successful, or rejects with an error message if the request fails.
+ */
+let getBranch=async (branchId) => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+"/api/getById/"+branchId,
+      type: "GET",
+      beforeSend: (request) => {
+        request.setRequestHeader("session", session);
+        request.setRequestHeader("table", "branch");
+      },
+      success: (response) => {
+        if (response.status==200) {
+          resolve(response.output);
+        } else {
+          reject(response.message);
+        }
+      },
+      error: (error) => {
+        reject(error.responseJSON.message);
+      },
+    });
+  });
+}
+/**
  * Retrieves relation data from the API.
  *
  * @param {string} id - The ID of the data to retrieve.
@@ -235,7 +264,40 @@ let readData=async (dtDom, table, columnsConfig, relationConfig=null, exportConf
     });
   });
   if (branchId!='1') {
-    data=data.filter(d => d.branchId==branchId);
+    let branch=await getBranch(branchId);
+    data=data.filter(d => d.branchId.toLowerCase()==branch.name.toLowerCase());
+  }
+  if (table=='branch') {
+    let allBranchTarget=await new Promise((resolve, reject) => {
+      $.ajax({
+        url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
+        type: "GET",
+        beforeSend: (request) => {
+          request.setRequestHeader("session", session);
+          request.setRequestHeader("table", 'target');
+          request.setRequestHeader("column", 'month');
+        },
+        success: (response) => {
+          if (response.status==200) {
+            resolve(response.output);
+          } else {
+            reject(response.message);
+          }
+        },
+        error: (error) => {
+          console.error(error.message);
+        },
+      });
+    });
+    data=data.map((d) => {
+      d.totalShips=allBranchTarget.filter(t => t.branchId==d.id)[0].totalShips;
+      d.wastingTime=allBranchTarget.filter(t => t.branchId==d.id)[0].wastingTime;
+      d.totalTonage=allBranchTarget.filter(t => t.branchId==d.id)[0].totalTonage;
+      d.loadingRate=allBranchTarget.filter(t => t.branchId==d.id)[0].loadingRate;
+      d.totalShipsAssist=allBranchTarget.filter(t => t.branchId==d.id)[0].totalShipsAssist;
+      d.totalAssistTime=allBranchTarget.filter(t => t.branchId==d.id)[0].totalAssistTime;
+      return d;
+    }).filter(d => d.id!=1);
   }
   // if (relationConfig) {
   //   let current=0;
@@ -382,6 +444,36 @@ let submitAdd=(table) => {
     },
     success: (response) => {
       if (response.status==200) {
+        if (table=='branch') {
+          $.ajax({
+            url: baseUrl+'/api/add',
+            type: "POST",
+            data: JSON.stringify({
+              month: thisMonth,
+              branchId: response.output,
+              totalShips: 0,
+              wastingTime: 0,
+              totalTonage: 0,
+              loadingRate: 0,
+              totalShipsAssist: 0,
+              totalAssistTime: 0
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            beforeSend: (request) => {
+              request.setRequestHeader("session", session);
+              request.setRequestHeader("table", 'target');
+            },
+            success: (response) => {
+              if (response.status!=200) {
+                throw new Error(response.message);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            }
+          });
+        }
         showAlert('#bbaModalFooter', 'success', response.message);
       } else {
         showAlert('#bbaModalFooter', 'danger', response.message);
@@ -821,9 +913,213 @@ let submitActivityTime=(pbmId) => {
   });;
 }
 
+// manage target
+let manageTarget=async (title, branchId) => {
+  $('#bbaModalTitle').html(title);
+  $('#bbaModal').modal('show');
+  $.ajax({
+    url: baseUrl+'/api/getById/'+branchId,
+    type: "GET",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'target');
+      request.setRequestHeader("column", 'branchId');
+    },
+    success: async (response) => {
+      if (response.status==200) {
+        if (response.output) {
+          let branchTargetData=(response.output.filter(v => v.month==moment().format('YYYY-MM')+'-00'))[0];
+          let form=`
+            <form id="targetForm">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="totalShips" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.totalShips}" />
+                    <label>Number of Ships</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target total kapal (unit)
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="wastingTime" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.wastingTime}" />
+                    <label>Wasting Time (jam)</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target wasting time (jam)
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="totalTonage" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.totalTonage}" />
+                    <label>Total Tonnage (Ton)</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target jumlah muatan kapal (ton)
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="loadingRate" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.loadingRate}" />
+                    <label>Loading / Discharging Rate (jam)</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target lama kegiatan (jam)
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="totalShipsAssist" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.totalShipsAssist}" />
+                    <label>Number of Ship's Assist</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target total kapal tug
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-floating">
+                    <input name="totalAssistTime" type="number" class="form-control" aria-describedby="floatingInputHelp" value="${branchTargetData.totalAssistTime}" />
+                    <label>Total Assist Time (jam)</label>
+                    <div class="form-text">
+                      <i class="bx bx-info-circle"></i> Target lama assit (jam)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <form id="targetForm">
+          `;
+          $('#bbaModalBody').html(form);
+          $('#bbaModalFooter').html(`
+            <button id="updateTarget" type="button" class="btn btn-success" style="float: right;" onclick="updateTarget('${thisMonth}', '${branchId}')">
+              Simpan <i class="bx bx-save"></i>
+            </button>
+          `);
+        } else {
+          $('#bbaModalBody').html(`<div class="alert alert-danger" role="alert">Data not found</div>`);
+          $('#bbaModalFooter').html(`
+            <button id="createTarget" type="button" class="btn btn-success" style="float: right;" onclick="createTarget('${thisMonth}', '${branchId}')">
+              Create Target <i class="bx bx-target-lock"></i>
+            </button>
+          `);
+        }
+      } else {
+        $('#bbaModalBody').html(`<div class="alert alert-danger" role="alert">${response.message}</div>`);
+        $('#bbaModalFooter').html(`
+            <button id="createTarget" type="button" class="btn btn-success" style="float: right;" onclick="createTarget('${thisMonth}', '${branchId}')">
+              Create Target <i class="bx bx-target-lock"></i>
+            </button>
+          `);
+      }
+    }, error: (error) => {
+      console.error(error);
+      showAlert('#activityTimeModalBody', 'danger', error.responseJSON.message);
+    }
+  });
+}
+
+let createTarget=(month, branchId) => {
+  $.ajax({
+    url: baseUrl+'/api/add',
+    type: "POST",
+    data: JSON.stringify({
+      month: month,
+      branchId: parseInt(branchId),
+      totalShips: 0,
+      wastingTime: 0,
+      totalTonage: 0,
+      loadingRate: 0,
+      totalShipsAssist: 0,
+      totalAssistTime: 0
+    }),
+    dataType: "json",
+    contentType: "application/json",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("table", 'target');
+      $('#createTarget').html(`
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      `);
+      $('#createTarget').prop('disabled', true);
+    },
+    success: (response) => {
+      showAlert('#bbaModalFooter', 'success', response.message);
+      $('#createTarget').html(`Please reload!`);
+      if (response.status!=200) {
+        throw new Error(response.message);
+      }
+    },
+    error: (error) => {
+      console.error(error);
+      showAlert('#bbaModalFooter', 'success', error.message);
+    }
+  });
+}
+
+let updateTarget=(month, branchId) => {
+  let formData=JSON.stringify(
+    serializeToJson($("#targetForm").serializeArray())
+  );
+  $.ajax({
+    url: baseUrl+'/api/updateTarget',
+    type: "POST",
+    data: formData,
+    dataType: "json",
+    contentType: "application/json",
+    beforeSend: (request) => {
+      request.setRequestHeader("session", session);
+      request.setRequestHeader("month", month);
+      request.setRequestHeader("branchId", branchId);
+      $('#updateTarget').html(`
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      `);
+      $('#updateTarget').prop('disabled', true);
+    },
+    success: (response) => {
+      showAlert('#bbaModalFooter', 'success', response.message);
+      $('#updateTarget').html(`Simpan <i class="bx bx-save"></i>`);
+      $('#updateTarget').prop('disabled', false);
+      $('#bbaModal').on('hidden.bs.modal', () => {
+        location.reload();
+      });
+      if (response.status!=200) {
+        throw new Error(response.message);
+      }
+    },
+    error: (error) => {
+      console.error(error);
+      showAlert('#bbaModalFooter', 'danger', error.message);
+    }
+  });
+}
+
+let getAllBranch=async () => {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: baseUrl+"/api/getAll",
+      type: "GET",
+      beforeSend: (request) => {
+        request.setRequestHeader("session", session);
+        request.setRequestHeader("table", 'branch');
+      },
+      success: (response) => {
+        if (response.status==200) {
+          resolve(response.output);
+        }
+      },
+      error: (error) => {
+        reject(error.message);
+      }
+    })
+  })
+}
 (async () => {
   // auto update target per Month
-  let thisMonth=moment().format('YYYY-MM')+'-00';
+  let allBranch=await getAllBranch();
   await $.ajax({
     url: baseUrl+"/api/getById/"+thisMonth,
     type: "GET",
@@ -834,32 +1130,35 @@ let submitActivityTime=(pbmId) => {
     },
     success: (response) => {
       if (!response.output) {
-        $.ajax({
-          url: baseUrl+"/api/add",
-          type: "POST",
-          data: JSON.stringify({
-            month: thisMonth,
-            totalShips: 0,
-            wastingTime: 0,
-            totalTonage: 0,
-            loadingRate: 0,
-            totalShipsAssist: 0,
-            totalAssistTime: 0
-          }),
-          dataType: "json",
-          contentType: "application/json",
-          beforeSend: (request) => {
-            request.setRequestHeader("session", session);
-            request.setRequestHeader("table", 'target');
-          },
-          success: (response) => {
-            if (response.status!=200) {
-              console.error(response.message);
-            }
-          },
-          error: (error) => {
-            console.error(error);
-          },
+        allBranch.forEach((branch) => {
+          $.ajax({
+            url: baseUrl+"/api/add",
+            type: "POST",
+            data: JSON.stringify({
+              month: thisMonth,
+              branchId: parseInt(branch.id),
+              totalShips: 0,
+              wastingTime: 0,
+              totalTonage: 0,
+              loadingRate: 0,
+              totalShipsAssist: 0,
+              totalAssistTime: 0
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            beforeSend: (request) => {
+              request.setRequestHeader("session", session);
+              request.setRequestHeader("table", 'target');
+            },
+            success: (response) => {
+              if (response.status!=200) {
+                console.error(response.message);
+              }
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
         });
       }
     },
@@ -869,58 +1168,58 @@ let submitActivityTime=(pbmId) => {
   });
 
   // target
-  await $.ajax({
-    url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
-    type: "GET",
-    beforeSend: (request) => {
-      request.setRequestHeader("session", session);
-      request.setRequestHeader("table", 'target');
-      request.setRequestHeader("column", 'month');
-    },
-    success: (response) => {
-      if (response.status==200) {
-        for (let key in response.output[0]) {
-          $(`input[name="${key}"]`).val(response.output[0][key]);
-          if (key=='id') {
-            localStorage.setItem('targetId', response.output[0][key]);
-          }
-        }
-      } else {
-        console.error(response.message);
-      }
-    },
-    error: (error) => {
-      console.error(error.responseJSON.message);
-    },
-  });
+  // await $.ajax({
+  //   url: baseUrl+"/api/getById/"+moment().format('YYYY-MM')+'-00',
+  //   type: "GET",
+  //   beforeSend: (request) => {
+  //     request.setRequestHeader("session", session);
+  //     request.setRequestHeader("table", 'target');
+  //     request.setRequestHeader("column", 'month');
+  //   },
+  //   success: (response) => {
+  //     if (response.status==200) {
+  //       for (let key in response.output[0]) {
+  //         $(`input[name="${key}"]`).val(response.output[0][key]);
+  //         if (key=='id') {
+  //           localStorage.setItem('targetId', response.output[0][key]);
+  //         }
+  //       }
+  //     } else {
+  //       console.error(response.message);
+  //     }
+  //   },
+  //   error: (error) => {
+  //     console.error(error.responseJSON.message);
+  //   },
+  // });
 
-  $('#submitTarget').click(() => {
-    let formData=JSON.stringify(
-      serializeToJson($("#monthlyTarget").serializeArray())
-    );
-    $.ajax({
-      url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
-      type: "POST",
-      data: formData,
-      dataType: "json",
-      contentType: "application/json",
-      beforeSend: (request) => {
-        request.setRequestHeader("session", session);
-        request.setRequestHeader("table", 'target');
-      },
-      success: (response) => {
-        if (response.status==200) {
-          showAlert('#monthlyTarget', 'success', response.message);
-          setTimeout(() => {
-            location.reload();
-          }, 2000);
-        } else {
-          showAlert('#monthlyTarget', 'danger', response.message);
-        }
-      },
-      error: (error) => {
-        showAlert('#monthlyTarget', 'danger', error);
-      }
-    });
-  });
+  // $('#submitTarget').click(() => {
+  //   let formData=JSON.stringify(
+  //     serializeToJson($("#monthlyTarget").serializeArray())
+  //   );
+  //   $.ajax({
+  //     url: baseUrl+"/api/update/"+localStorage.getItem('targetId'),
+  //     type: "POST",
+  //     data: formData,
+  //     dataType: "json",
+  //     contentType: "application/json",
+  //     beforeSend: (request) => {
+  //       request.setRequestHeader("session", session);
+  //       request.setRequestHeader("table", 'target');
+  //     },
+  //     success: (response) => {
+  //       if (response.status==200) {
+  //         showAlert('#monthlyTarget', 'success', response.message);
+  //         setTimeout(() => {
+  //           location.reload();
+  //         }, 2000);
+  //       } else {
+  //         showAlert('#monthlyTarget', 'danger', response.message);
+  //       }
+  //     },
+  //     error: (error) => {
+  //       showAlert('#monthlyTarget', 'danger', error);
+  //     }
+  //   });
+  // });
 })()

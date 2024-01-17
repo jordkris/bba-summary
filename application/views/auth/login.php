@@ -32,7 +32,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/assets/img/favicon/favicon.png" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -123,7 +123,7 @@
                 </div>
               </form>
 				<footer>
-					<center>Bug Report : 0823.5205.9054 (Idris)</center>
+					<center><i class="bx bx-support"></i> Bug Report : 0823.5205.9054 (Idris)</center>
 				</footer>
             </div>
           </div>
@@ -158,7 +158,7 @@
     
   </body>
 <footer>
-	<center>&copy;2023 Port Division | Bosowa Energy Group</center>
+	<center>&copy;2024 Port Division | Bosowa Energy Group</center>
 </footer>
 <br></br>
 </html>

@@ -13,6 +13,8 @@ class Api extends CI_Controller
     $this->table = isset($header['table']) ? $header['table'] : null;
     $this->column = isset($header['column']) ? $header['column'] : null;
     $this->webSession = isset($header['session']) ? $header['session'] : null;
+    $this->month = isset($header['month']) ? $header['month'] : null;
+    $this->branchId = isset($header['branchId']) ? $header['branchId'] : null;
   }
 
 
@@ -23,7 +25,7 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'get') {
         if (!$this->table) {
-          $response->status = 404;
+          $response->status = 400;
           throw new Exception('Table is required');
         }
         // if (!$this->m_auth->checkSession($this->webSession)) {
@@ -77,7 +79,7 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'get') {
         if (!$this->table) {
-          $response->status = 404;
+          $response->status = 400;
           throw new Exception('Table is required');
         }
         // if (!$this->m_auth->checkSession($this->webSession)) {
@@ -121,7 +123,7 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'post') {
         if (!$this->table) {
-          $response->status = 404;
+          $response->status = 400;
           throw new Exception('Table is required');
         }
         if (!$this->m_auth->checkSession($this->webSession)) {
@@ -157,7 +159,7 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'post') {
         if (!$this->table) {
-          $response->status = 404;
+          $response->status = 400;
           throw new Exception('Table is required');
         }
         if (!$this->m_auth->checkSession($this->webSession)) {
@@ -195,7 +197,7 @@ class Api extends CI_Controller
     try {
       if ($this->input->method() == 'delete') {
         if (!$this->table) {
-          $response->status = 404;
+          $response->status = 400;
           throw new Exception('Table is required');
         }
         if (!$this->m_auth->checkSession($this->webSession)) {
@@ -217,6 +219,47 @@ class Api extends CI_Controller
         throw new Exception('This method is not allowed');
       }
     } catch (Exception $e) {
+      $response->message = $e->getMessage();
+    }
+    echo $response->toJson();
+  }
+
+  public function updateTarget()
+  {
+    header('Content-Type: application/json');
+    $response = new ApiResponse();
+
+    try {
+      if ($this->input->method() == 'post') {
+        if (!$this->month) {
+          $response->status = 400;
+          throw new Exception('Month is required');
+        }
+        if (!$this->branchId) {
+          $response->status = 400;
+          throw new Exception('Branch Id is required');
+        }
+        if (!$this->m_auth->checkSession($this->webSession)) {
+          $response->status = 401;
+          throw new Exception('Unauthorized');
+        }
+        $data = json_decode($this->input->raw_input_stream, true);
+        $dbResponse = $this->m_db->updateTarget($data, $this->month, $this->branchId);
+        if (!$dbResponse->error['code']) {
+          $response->output = $dbResponse->output;
+          $response->status = 200;
+          $response->message = 'Success';
+        } else {
+          $response->messageDetail = $dbResponse->error;
+          $response->status = 500;
+          throw new Exception('Internal server error');
+        }
+      } else {
+        $response->status = 405;
+        throw new Exception('This method is not allowed');
+      }
+    } catch (Exception $e) {
+
       $response->message = $e->getMessage();
     }
     echo $response->toJson();

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>BOSOWA BANDAR | HOMEPAGE</title>
+  <title>BOSOWA BANDAR DASHBOARD</title>
 
   <meta name="description" content="" />
 
@@ -72,14 +72,21 @@
           <li class="menu-item active">
             <a href="#" class="menu-link">
               <i class="menu-icon tf-icons bx bx-home-circle"></i>
-              <div data-i18n="Analytics">Dashboard</div>
+              <div data-i18n="Analytics">DASHBOARD</div>
             </a>
           </li>
           <!-- Login -->
-          <li class="menu-item active">
+          <li class="menu-item">
             <a href="<?= base_url('auth'); ?>" class="menu-link">
               <i class="menu-icon tf-icons bx bx-log-in"></i>
-              <div data-i18n="Analytics">Login</div>
+              <div data-i18n="Analytics">LOGIN</div>
+            </a>
+          </li>
+          <br>
+          <!-- Banner -->
+          <li class="menu-item">
+            <a href="<?= base_url('auth'); ?>" class="menu-link">
+              <i><img src="https://i.ibb.co/nnghdHp/BANNER-WEB-PORTAL.png" alt="Gambar_Langit" style="width:200px;height:200px;"></i>
             </a>
           </li>
         </ul>
@@ -102,7 +109,7 @@
             <div class="navbar-nav align-items-center">
               <div class="nav-item d-flex align-items-center">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" class="form-control border-0 shadow-none" placeholder="Bosowa Bandar Dashboard" aria-label="Bosowa Bandar Dashboard" />
+                <input type="text" class="form-control border-0 shadow-none" placeholder="Bosowa Bandar" aria-label="Bosowa Bandar" />
               </div>
             </div>
             <!-- /Search -->
@@ -119,15 +126,39 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="card">
+                  <div class="d-flex align-items-end row">
+                    <div class="col-sm-7">
+                      <div class="card-body">
+                        <h5 class="card-title text-primary">Welcome, Bosowa Bandar Dashboard! 🎉</h5>
+                        <p class="mb-4">
+                          We are a Shipping Agency, Stevedoring and Tug Assist Services Company in Indonesia.
+                        </p>
+
+                        <a href="#section-performance" class="btn btn-sm btn-outline-primary">View Our Performance in 2024</a>
+                      </div>
+                    </div>
+                    <div class="col-sm-5 text-center text-sm-left">
+                      <div class="card-body pb-0 px-0 px-md-4">
+                        <img src="<?= base_url(); ?>/assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+            </div>
+            <section id="section-performance">
+              <div class="col-lg-12">
+                <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Performance of Agency</h5>
+                    <h5 class="card-title">Shipping Agency</h5>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Number of Ships</div>
-                        <div id="totalShips" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="totalShips" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -136,8 +167,8 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Wasting Time</div>
-                        <div id="wastingTime" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="wastingTime" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -152,14 +183,14 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Performance of PBM</h5>
+                    <h5 class="card-title">Stevedoring (PBM)</h5>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Total Tonnage</div>
-                        <div id="totalTonage" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="totalTonage" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -168,8 +199,8 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Loading / Discharging Rate</div>
-                        <div id="loadingRate" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="loadingRate" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -184,14 +215,14 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Performance of TUG Support</h5>
+                    <h5 class="card-title">Tug Assist Services</h5>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-lg-9">
                         <div>Number of Ship's Assist</div>
-                        <div id="totalShipsAssist" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="totalShipsAssist" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -200,8 +231,8 @@
                       </div>
                       <div class="col-lg-9">
                         <div>Total Assist Time</div>
-                        <div id="totalAssistTime" class="progress" style="height: 25px;">
-                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="totalAssistTime" class="progress" style="height: 30px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%; border-radius: 10rem;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                       </div>
                       <div class="col-lg-3">
@@ -213,22 +244,22 @@
                 </div>
                 <div class="dropdown-divider"></div>
               </div>
-            </div>
           </div>
-          <!-- / Content -->
-          <div class="content-backdrop fade"></div>
         </div>
-        <!-- Content wrapper -->
+        <!-- / Content -->
+        <div class="content-backdrop fade"></div>
       </div>
-      <!-- / Layout page -->
+      <!-- Content wrapper -->
     </div>
+    <!-- / Layout page -->
+  </div>
 
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
   </div>
   <!-- / Layout wrapper -->
   <div class="modal fade" id="homeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="homeModalTitle"></h5>
@@ -265,7 +296,12 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 <footer>
-	<center>&copy;2023 Port Division | Bosowa Energy Group</center>
+  <center>&copy;2024 Port Division | Bosowa Energy Group</center>
 </footer>
 <br></br>
+<div class="buy-now">
+  <a href="https://bosowabandar.com/auth" target="" class="btn btn-danger btn-buy-now">LOGIN
+  </a>
+</div>
+
 </html>
