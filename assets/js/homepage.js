@@ -68,7 +68,7 @@ let createChart=(id, labels, data, tooltipFn) => {
       labels: labels,
       datasets: [{
         data: data,
-        backgroundColor: ['blue', 'red']
+        backgroundColor: ['Blue', 'DarkRed']
       }]
     },
     options: {
@@ -140,6 +140,46 @@ let generateChart=(data, targets, branchTarget, feature, unit, tooltipFn, toMinu
     branchLabels.push('Remaining');
     createChart(`#chart${d.name.replaceAll(' ', '')}`, branchLabels, branchData, tooltipFn);
   });
+}
+
+let generateSummaryChart=(id, data, yLabel) => {
+  console.log(data, `#${id}Summary`)
+  new Chart($(`#${id}Summary`), {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: data
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              return `${context.parsed.y} ${yLabel}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Month"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: yLabel
+          }
+        }
+      }
+    },
+  })
 }
 
 (async () => {
@@ -309,6 +349,61 @@ let generateChart=(data, targets, branchTarget, feature, unit, tooltipFn, toMinu
               </button>
             `);
           });
+        } else {
+          showAlert('.content-wrapper', 'danger', `(${res.status}) ${res.message}`);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  });
+  ['totalShips', 'totalTonage', 'totalShipsAssist'].forEach((feature) => {
+    $.ajax({
+      url: baseUrl+'/api/summary/'+feature,
+      type: "GET",
+      success: (res) => {
+        if (res.status==200) {
+          let years=[];
+          let seriesData=[];
+          res.output.forEach((r) => {
+            if (!years.includes(r.year)) {
+              years.push(r.year);
+            }
+          });
+          let monthData;
+          years.forEach((y) => {
+            monthData=Array(12).fill(0);
+            res.output.filter(r => r.year==y).forEach((r) => {
+              if (parseInt(r.monthInt)>0) {
+                monthData[parseInt(r.monthInt)-1]=parseFloat(r.count);
+              }
+            });
+            // seriesData.push({
+            //   name: y,
+            //   data: monthData
+            // });
+            seriesData.push({
+              label: y,
+              data: monthData,
+              borderColor: '#ffffff',
+              backgroundColor: randomColor(),
+              borderWidth: 2,
+              borderRadius: Number.MAX_VALUE,
+              borderSkipped: false,
+            });
+          });
+          switch (feature) {
+            case 'totalShips':
+              generateSummaryChart(feature, seriesData, 'Ships');
+              break;
+            case 'totalTonage':
+              generateSummaryChart(feature, seriesData, 'Tons');
+              break;
+            case 'totalShipsAssist':
+              generateSummaryChart(feature, seriesData, 'Ships');
+              break;
+          }
         } else {
           showAlert('.content-wrapper', 'danger', `(${res.status}) ${res.message}`);
         }

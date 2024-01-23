@@ -175,4 +175,36 @@ class M_db extends CI_Model
     $response->error = $this->db->error();
     return $response;
   }
+
+  public function getSummary($feature) {
+    $response = new DbResponse();
+    switch ($feature) {
+      case 'totalShips':
+        $response->output = $this->db->query("
+          SELECT EXTRACT(YEAR FROM sd.issuedTimeSPB) as year, MONTHNAME(sd.issuedTimeSPB) as month, EXTRACT(MONTH FROM sd.issuedTimeSPB) as monthInt, COUNT(sd.id) as count
+          FROM shipdata sd
+          GROUP BY year, month
+          ORDER BY year, monthInt;
+        ");
+        break;
+      case 'totalTonage':
+        $response->output = $this->db->query("
+          SELECT EXTRACT(YEAR FROM pd.createdDate) as year, MONTHNAME(pd.createdDate) as month, EXTRACT(MONTH FROM pd.createdDate) as monthInt, SUM(pd.cargoQuantity) as count
+          FROM pbmdata pd
+          GROUP BY year, month
+          ORDER BY year, monthInt;
+        ");
+        break;
+      case 'totalShipsAssist':
+        $response->output = $this->db->query("
+          SELECT EXTRACT(YEAR FROM td.connectTime) as year, MONTHNAME(td.connectTime) as month, EXTRACT(MONTH FROM td.connectTime) as monthInt, COUNT(td.id) as count
+          FROM tugdata td
+          GROUP BY year, month
+          ORDER BY year, monthInt;
+        ");
+        break;
+    }
+    $response->error = $this->db->error();
+    return $response;
+  }
 }

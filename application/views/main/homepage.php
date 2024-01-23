@@ -124,7 +124,7 @@
 
           <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row">
-              <div class="col-lg-12">
+              <div class="col-12">
                 <div class="card">
                   <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
@@ -132,9 +132,11 @@
                         <h5 class="card-title text-primary">Welcome, Bosowa Bandar Dashboard! 🎉</h5>
                         <p class="mb-4">
                           We are a Shipping Agency, Stevedoring and Tug Assist Services Company in Indonesia.
+                          <br>Becoming a Professional Company and International Standard.
                         </p>
+                        <a href="#section-performance" class="btn btn-sm btn-outline-primary">Performance : January 2024</a>
 
-                        <a href="#section-performance" class="btn btn-sm btn-outline-primary">View Our Performance in 2024</a>
+                        <a href="#section-performance" class="btn btn-sm btn-outline-primary">Achievement Year by Year</a>
                       </div>
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
@@ -148,7 +150,7 @@
               <div class="dropdown-divider"></div>
             </div>
             <section id="section-performance">
-              <div class="col-lg-12">
+              <div class="col-12">
                 <div class="card">
                   <div class="card-header">
                     <h5 class="card-title">Shipping Agency</h5>
@@ -180,7 +182,7 @@
                 </div>
                 <div class="dropdown-divider"></div>
               </div>
-              <div class="col-lg-12">
+              <div class="col-12">
                 <div class="card">
                   <div class="card-header">
                     <h5 class="card-title">Stevedoring (PBM)</h5>
@@ -212,7 +214,7 @@
                 </div>
                 <div class="dropdown-divider"></div>
               </div>
-              <div class="col-lg-12">
+              <div class="col-12">
                 <div class="card">
                   <div class="card-header">
                     <h5 class="card-title">Tug Assist Services</h5>
@@ -244,6 +246,42 @@
                 </div>
                 <div class="dropdown-divider"></div>
               </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="card-title">Summary Shipping Agency</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="totalShipsSummary"></canvas>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="card-title">Summary Stevedoring</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="totalTonageSummary"></canvas>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="card-title">Summary Tug Assist</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="totalShipsAssistSummary"></canvas>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
         <!-- / Content -->
