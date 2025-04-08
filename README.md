@@ -1,4 +1,4 @@
 # bba-summary
 Project for ship management
 
-Demo : [https://bosowabandar.com](https://bosowabandar.com)
+Demo : [https://dash.bosowabandar.com/](https://dash.bosowabandar.com/)
